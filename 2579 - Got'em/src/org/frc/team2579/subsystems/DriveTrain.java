@@ -11,18 +11,20 @@ import org.frc.team2579.utility.MotionProfilePoint;
 import org.frc.team2579.utility.PIDParams;
 import org.frc.team2579.utility.SoftwarePIDController;
 import org.frc.team2579.utility.MPSoftwarePIDController.MPSoftwareTurnType;
-
 import org.frc.team2579.OI;
 import org.frc.team2579.RobotMain;
 import org.frc.team2579.RobotMap;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.CANTalon.TalonControlMode;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
