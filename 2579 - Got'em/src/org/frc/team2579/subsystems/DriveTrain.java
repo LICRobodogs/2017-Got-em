@@ -119,7 +119,6 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	private double gyroLockAngleDeg;
 	private double kPGyro = 0.04;
 	private DigitalInput gyroCalibrationSwitch;
-	private DigitalInput laserSensor;
 	private boolean isCalibrating = false;
 	private double gyroOffsetDeg = 0;
 
@@ -186,31 +185,8 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 		gyro.reset();
 	}
 
-	public void calibrateGyro() {
-		gyro.calibrate();
-	}
-
-	public void endGyroCalibration() {
-		if (isCalibrating == true) {
-			gyro.endCalibration();
-			isCalibrating = false;
-		}
-	}
-
 	public boolean getGyroCalibrationSwitch() {
 		return !gyroCalibrationSwitch.get();
-	}
-
-	public boolean getLaserSensorStatus() {
-		return !laserSensor.get();
-	}
-
-	public void checkForGyroCalibration() {
-		if (!isCalibrating && getGyroCalibrationSwitch()) {
-			gyro.startCalibration();
-			// gyro.calibrate();
-			isCalibrating = true;
-		}
 	}
 
 	public void setGyroOffset(double offsetDeg) {
@@ -470,22 +446,6 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 				/ Math.asin(steerNonLinearity);
 	}
 
-	public void setShiftState(SpeedShiftState state) {
-		if (state == SpeedShiftState.HI) {
-			speedShift.set(true);
-		} else if (state == SpeedShiftState.LO) {
-			speedShift.set(false);
-		}
-	}
-
-	public void setClimberState(ClimberState state) {
-		if (state == ClimberState.DEPLOYED) {
-			climber.set(Value.kForward);
-		} else if (state == ClimberState.RETRACTED) {
-			climber.set(Value.kReverse);
-		}
-	}
-
 	public boolean isFinished() {
 		return isFinished;
 	}
@@ -532,8 +492,6 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 				SmartDashboard.putNumber("Gyro Delta", delta);
 				SmartDashboard.putBoolean("Gyro Calibrating", isCalibrating);
 				SmartDashboard.putNumber("Gyro Offset", gyroOffsetDeg);
-				SmartDashboard.putBoolean("Laser Sensor",
-						getLaserSensorStatus());
 				SmartDashboard.putNumber("Yaw Rate", getGyroRateDegPerSec());
 				SmartDashboard.putNumber("Delta PID Angle", targetPIDAngle
 						- getGyroAngleDeg());

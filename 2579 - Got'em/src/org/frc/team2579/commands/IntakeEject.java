@@ -1,6 +1,6 @@
 package org.frc.team2579.commands;
 
-import edu.rhhs.frc.subsystems.Intake;
+import org.frc.team2579.subsystems.Intake;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**

@@ -15,19 +15,16 @@ import org.frc.team2579.commands.IntakeInnerSpeed;
 import org.frc.team2579.commands.IntakeLowBarPosition;
 import org.frc.team2579.commands.IntakeOff;
 import org.frc.team2579.commands.IntakeOuterSpeed;
-import org.frc.team2579.commands.ManipulatorArmSpeed;
-import org.frc.team2579.commands.ManipulatorMoveMP;
+import org.frc.team2579.commands.ShooterShoot;
 import org.frc.team2579.commands.ShooterShootAndRetract;
 import org.frc.team2579.commands.ShooterShootAndRetractCamera;
 import org.frc.team2579.commands.ShooterWinchRetractAndSpoolOut;
 import org.frc.team2579.commands.ShooterWinchSafeRelease;
 import org.frc.team2579.commands.ShooterWinchSpeed;
+import org.frc.team2579.commands.ShooterWinchSpoolOut;
 import org.frc.team2579.controller.XboxController;
 import org.frc.team2579.subsystems.DriveTrain;
-import org.frc.team2579.subsystems.DriveTrain.ClimberState;
 import org.frc.team2579.subsystems.Intake;
-import org.frc.team2579.subsystems.Manipulator.ArmSide;
-import org.frc.team2579.subsystems.Manipulator.PresetPositions;
 import org.frc.team2579.utility.MPSoftwarePIDController.MPSoftwareTurnType;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -50,15 +47,6 @@ public class OI {
 
 		// Driver's sticks
 
-		JoystickButton climberDeploy1 = new JoystickButton(
-				m_driverJoystickPower, 3);
-		climberDeploy1.whenPressed(new DriveTrainClimberSet(
-				ClimberState.DEPLOYED));
-
-		JoystickButton climberRetract1 = new JoystickButton(
-				m_driverJoystickPower, 4);
-		climberRetract1.whenPressed(new DriveTrainClimberSet(
-				ClimberState.RETRACTED));
 
 		JoystickButton intakeFullyDeploy1 = new JoystickButton(
 				m_driverJoystickPower, 5);
@@ -96,14 +84,6 @@ public class OI {
 		intakeEject1.whenPressed(new IntakeEject());
 		intakeEject1.whenReleased(new IntakeOff());
 
-		// JoystickButton shooterShoot1 = new
-		// JoystickButton(m_driverJoystickTurn, 2);
-		// shooterShoot1.whenPressed(new ShooterShootAndRetract());
-
-		// JoystickButton engageClimberAndWinch1 = new
-		// JoystickButton(m_driverJoystickTurn, 11);
-		// engageClimberAndWinch1.whenPressed(new ClimberEngageAndWinch());
-
 		JoystickButton safeReleaseWinch1 = new JoystickButton(
 				m_driverJoystickTurn, 12);
 		safeReleaseWinch1.whenPressed(new ShooterWinchSafeRelease());
@@ -111,37 +91,11 @@ public class OI {
 		// Operator's controller
 		JoystickButton manipulatorDeploy = new JoystickButton(
 				m_operatorXBox.getJoyStick(), XboxController.Y_BUTTON);
-		manipulatorDeploy.whenPressed(new ManipulatorMoveMP(
-				PresetPositions.FULLY_DEPLOYED));
-
-		// JoystickButton retractClimber = new
-		// JoystickButton(m_operatorXBox.getJoyStick(),
-		// XboxController.B_BUTTON);
-		// retractClimber.whenPressed(new
-		// DriveTrainClimberSet(ClimberState.RETRACTED));
-		//
-		// JoystickButton deployClimber = new
-		// JoystickButton(m_operatorXBox.getJoyStick(),
-		// XboxController.X_BUTTON);
-		// deployClimber.whenPressed(new
-		// DriveTrainClimberSet(ClimberState.DEPLOYED));
+		manipulatorDeploy.whenPressed(new ManipulatorDeploy));
 
 		JoystickButton manipulatorRetract = new JoystickButton(
 				m_operatorXBox.getJoyStick(), XboxController.A_BUTTON);
-		manipulatorRetract.whenPressed(new ManipulatorMoveMP(
-				PresetPositions.ZERO));
-
-		// JoystickButton shooterShortPosition = new
-		// JoystickButton(m_operatorXBox.getJoyStick(),
-		// XboxController.X_BUTTON);
-		// shooterShortPosition.whenPressed(new
-		// ShooterShotPosition(ShotPosition.SHORT));
-
-		JoystickButton intakeFullyDeploy = new JoystickButton(
-				m_operatorXBox.getJoyStick(),
-				XboxController.RIGHT_BUMPER_BUTTON);
-		intakeFullyDeploy.whenPressed(new IntakeFullyDeploy());
-		intakeFullyDeploy.whenReleased(new IntakeOff());
+		manipulatorRetract.whenPressed(new ManipulatorRetract));
 
 		JoystickButton intakeEject = new JoystickButton(
 				m_operatorXBox.getJoyStick(), XboxController.LEFT_BUMPER_BUTTON);
@@ -150,21 +104,14 @@ public class OI {
 
 		XBoxTriggerButton shooterShoot = new XBoxTriggerButton(m_operatorXBox,
 				XBoxTriggerButton.RIGHT_TRIGGER);
-		shooterShoot.whenPressed(new ShooterShootAndRetract(false));
-
-		XBoxTriggerButton shooterShootCamera = new XBoxTriggerButton(
-				m_operatorXBox, XBoxTriggerButton.LEFT_TRIGGER);
-		shooterShootCamera.whenPressed(new ShooterShootAndRetractCamera());
+		shooterShoot.whenPressed(new ShooterShoot(false));
 
 		JoystickButton retractWinch = new JoystickButton(
 				m_operatorXBox.getJoyStick(), XboxController.BACK_BUTTON);
 		retractWinch.whenPressed(new ShooterWinchRetractAndSpoolOut());
 
-		JoystickButton safeReleaseWinch = new JoystickButton(
-				m_operatorXBox.getJoyStick(), XboxController.START_BUTTON);
-		safeReleaseWinch.whenPressed(new ShooterWinchSafeRelease());
-
-		// Motors
+	}
+		/*// Motors
 		Button manipulatorArmUP = new InternalButton();
 
 		SmartDashboard.putData("Manip Positive", manipulatorArmUP);
@@ -243,29 +190,7 @@ public class OI {
 				MPSoftwareTurnType.TANK));
 		SmartDashboard.putData("Turn Absolute", turnAbsoluteMP);
 
-		Button armMPDeploy = new InternalButton();
-		armMPDeploy.whenPressed(new ManipulatorMoveMP(
-				PresetPositions.FULLY_DEPLOYED));
-		SmartDashboard.putData("Arm Deploy", armMPDeploy);
-
-		Button armMPPartialDeploy = new InternalButton();
-		armMPPartialDeploy.whenPressed(new ManipulatorMoveMP(
-				PresetPositions.PARTIALLY_DEPLOYED));
-		SmartDashboard.putData("Arm Partial Deploy", armMPPartialDeploy);
-
-		Button armMPZero = new InternalButton();
-		armMPZero.whenPressed(new ManipulatorMoveMP(PresetPositions.ZERO));
-		SmartDashboard.putData("Arm Zero Position", armMPZero);
-
-		Button armMPRetract = new InternalButton();
-		armMPRetract.whenPressed(new ManipulatorMoveMP(
-				PresetPositions.RETRACTED));
-		SmartDashboard.putData("Arm Retract", armMPRetract);
-
-		Button resetArmZero = new InternalButton();
-		resetArmZero.whenPressed(new ManipulatorResetZero());
-		SmartDashboard.putData("Reset Arm Zero", resetArmZero);
-
+		
 		Button gyroReset = new InternalButton();
 		gyroReset.whenPressed(new DriveTrainGyroReset());
 		SmartDashboard.putData("Gyro Reset", gyroReset);
@@ -326,6 +251,7 @@ public class OI {
 		cdfSwitch.whenPressed(new ManipulatorMoveMP(
 				PresetPositions.FULLY_DEPLOYED, true));
 	}
+*/
 
 	public Joystick getDriverJoystickPower() {
 		return m_driverJoystickPower;

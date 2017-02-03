@@ -1,6 +1,6 @@
 package org.frc.team2579.commands;
 
-import edu.rhhs.frc.RobotMain;
+import org.frc.team2579.RobotMain;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class IntakeOuterSpeed extends Command {
