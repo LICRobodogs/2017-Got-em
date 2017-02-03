@@ -27,6 +27,7 @@ public class DriveTrain extends Subsystem {
 	public static final double DRIVER_JOY1_C1 = .0089;
 	public static final double DRIVER_JOY1_C2 = .0737;
 	public static final double DRIVER_JOY1_C3 = 2.4126;
+	public static final double DRIVER_JOY1_DEADBAND = 10.0;
 	
 	// Robot Intrinsics
 	
@@ -43,7 +44,7 @@ public class DriveTrain extends Subsystem {
 
 	private RobotDrive m_drive;
 
-	private AHRS gyro = new AHRS(SPI.Port.kMXP);
+	private AHRS MXP = new AHRS(SPI.Port.kMXP);
 
 	public DriveTrain() {
 		try {
@@ -93,9 +94,34 @@ public class DriveTrain extends Subsystem {
 	
 	@Override
 	public void initDefaultCommand() {
+		// This needs to be here for reasons.
 	}
 	
-	public void joystickSensitivityAdjust() {
+	
+	private double joystickSensitivityAdjust(double rawInput, double C1, double 
+			C2, double C3, double deadband) {
+		// Accepts raw joystick input, outputs adjusted values based on
+		// nonlinear, 2nd order polynomial mapping.
+		
+		double adjustedOutput;
+		
+		if (rawInput < deadband){
+			adjustedOutput = 0.0;
+		} else {
+			adjustedOutput = C1 * Math.pow(rawInput, 2) + C2 * rawInput + C3;
+		}
+		
+		return adjustedOutput;
+		
+	}
+		
+	public void moveDistAtAngle(double distanceDesire, double angleDesire){
+		// Moves robot distanceDesire at angleDesire from current position and heading
+		// distanceDesire in inches, angleDesire in degrees where CCW is positive
+		
+		
+		
+		
 		
 		
 		
