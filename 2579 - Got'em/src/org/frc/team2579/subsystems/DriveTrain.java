@@ -1,8 +1,7 @@
 package org.frc.team2579.subsystems;
 
 import java.util.ArrayList;
-
-import org.frc.team2579.utility.CANTalonEncoder;
+//import org.frc.team2579.utility.CANTalonEncoder;
 import org.frc.team2579.OI;
 import org.frc.team2579.RobotMain;
 import org.frc.team2579.RobotMap;
@@ -34,12 +33,12 @@ public class DriveTrain extends Subsystem {
 	public static final double ENCODER_TICKS_TO_INCHES = 4096*Math.PI*4.0;
 	
 	// Motor controllers
-	private ArrayList<CANTalonEncoder> motorControllers = new ArrayList<CANTalonEncoder>();
+	//private ArrayList<CANTalonEncoder> motorControllers = new ArrayList<CANTalonEncoder>();
 
-	private CANTalonEncoder leftDrive1;
+	private CANTalon leftDrive1;
 	private CANTalon leftDrive2;
 
-	private CANTalonEncoder rightDrive1;
+	private CANTalon rightDrive1;
 	private CANTalon rightDrive2;
 
 	private RobotDrive m_drive;
@@ -48,14 +47,10 @@ public class DriveTrain extends Subsystem {
 
 	public DriveTrain() {
 		try {
-			leftDrive1 = new CANTalonEncoder(
-					RobotMap.DRIVETRAIN_LEFT_MOTOR1_CAN_ID,
-					ENCODER_TICKS_TO_INCHES, false, FeedbackDevice.QuadEncoder);
+			leftDrive1 = new CANTalon(RobotMap.DRIVETRAIN_LEFT_MOTOR1_CAN_ID);
 			leftDrive2 = new CANTalon(RobotMap.DRIVETRAIN_LEFT_MOTOR2_CAN_ID);
 
-			rightDrive1 = new CANTalonEncoder(
-					RobotMap.DRIVETRAIN_RIGHT_MOTOR1_CAN_ID,
-					ENCODER_TICKS_TO_INCHES, true, FeedbackDevice.QuadEncoder);
+			rightDrive1 = new CANTalon(RobotMap.DRIVETRAIN_RIGHT_MOTOR1_CAN_ID);
 			rightDrive2 = new CANTalon(RobotMap.DRIVETRAIN_RIGHT_MOTOR2_CAN_ID);
 
 			leftDrive2.changeControlMode(TalonControlMode.Follower);
@@ -77,8 +72,8 @@ public class DriveTrain extends Subsystem {
 			rightDrive2.enableBrakeMode(true);
 
 
-			motorControllers.add(leftDrive1);
-			motorControllers.add(rightDrive1);
+			//motorControllers.add(leftDrive1);
+			//motorControllers.add(rightDrive1);
 
 			m_drive = new RobotDrive(leftDrive1, rightDrive1);
 			m_drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);

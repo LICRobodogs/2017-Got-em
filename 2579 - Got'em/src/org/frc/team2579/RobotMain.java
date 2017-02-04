@@ -74,7 +74,6 @@ public class RobotMain extends IterativeRobot {
 
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
-		driveTrain.checkForGyroCalibration();
 		updateStatus();
 	}
 
@@ -102,10 +101,10 @@ public class RobotMain extends IterativeRobot {
 	}
 
 	public void updateStatus() {
-		driveTrain.updateStatus(operationMode);
+		//driveTrain.updateStatus(operationMode);
 		intake.updateStatus(operationMode);
 		manipulator.updateStatus(operationMode);
-		shooter.updateStatus(operationMode);
-		camera.updateStatus(operationMode);
+		//shooter.updateStatus(operationMode);
+		//camera.updateStatus(operationMode);
 	}
 }

@@ -2,11 +2,6 @@ package org.frc.team2579.subsystems;
 
 import java.util.ArrayList;
 
-import org.frc.team2579.subsystems.DriveTrain.ClimberState;
-import org.frc.team2579.utility.CANTalonEncoder;
-import org.frc.team2579.utility.ControlLoopable;
-import org.frc.team2579.utility.MPTalonPIDController;
-import org.frc.team2579.utility.PIDParams;
 import org.frc.team2579.RobotMain;
 import org.frc.team2579.RobotMap;
 
@@ -23,9 +18,8 @@ public class Manipulator extends Subsystem {
 	public Manipulator() {
 		try {
 			manipulator = new DoubleSolenoid(
-					RobotMap.INTAKE_OUTER_LIFT_PCM_ID,
-					RobotMap.INTAKE_INNER_LIFT_PCM_ID);
-			setClimberState(ClimberState.RETRACTED);
+					RobotMap.INTAKE_UP_PCM_ID,
+					RobotMap.INTAKE_DOWN_PCM_ID);
 		} catch (Exception e) {
 			System.err
 					.println("An error occurred in the Manipulator constructor");

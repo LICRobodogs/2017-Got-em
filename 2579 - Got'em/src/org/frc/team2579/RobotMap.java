@@ -30,7 +30,7 @@ public class RobotMap {
 	// PNEUMATICS
 	public static final int SHOOTER_POSITION_PCM_ID = 2;
 
-	public static final int INTAKE_OUTER_LIFT_PCM_ID = 4;
-	public static final int INTAKE_INNER_LIFT_PCM_ID = 3;
+	public static final int INTAKE_UP_PCM_ID = 4;
+	public static final int INTAKE_DOWN_PCM_ID = 3;
 
 }
