@@ -1,18 +1,20 @@
 package org.frc.team2579.subsystems;
 
-import java.util.ArrayList;
-
 import org.frc.team2579.RobotMain;
 import org.frc.team2579.RobotMap;
+import org.frc.team2579.utility.ControlLoopable;
 
-import com.ctre.CANTalon.TalonControlMode;
-
+import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Manipulator extends Subsystem {
-
+public class Manipulator extends Subsystem implements ControlLoopable
+{
+	public static enum LiftState { UP, DOWN };
+	public static final double INTAKE_LOAD_SPEED = 1;
+	public static final double INTAKE_EJECT_SPEED = 1;
+	private CANTalon roller;
 	private DoubleSolenoid manipulator;
 	
 	public Manipulator() {
@@ -20,16 +22,30 @@ public class Manipulator extends Subsystem {
 			manipulator = new DoubleSolenoid(
 					RobotMap.INTAKE_UP_PCM_ID,
 					RobotMap.INTAKE_DOWN_PCM_ID);
+			roller = new CANTalon(RobotMap.MANIPULATOR_MOTOR_CAN_ID);
+			roller.enableBrakeMode(true);
 		} catch (Exception e) {
 			System.err
 					.println("An error occurred in the Manipulator constructor");
 		}
 	}
-
-	public void setZeroPosition() {
-
+	
+	public void setZeroPosition(){
+		setPosition(LiftState.UP);
 	}
 
+	public void setPosition(LiftState state) {
+		if(state == LiftState.UP) {
+			manipulator.set(Value.kForward);
+		} else if(state == LiftState.DOWN) {
+			manipulator.set(Value.kReverse);
+		}
+	}
+	
+	public void setSpeed(double speed){
+		roller.set(speed);
+	}
+	
 	protected void initDefaultCommand() {
 	}
 
@@ -47,6 +63,18 @@ public class Manipulator extends Subsystem {
 			// mpController.getCurrentPoint().position : 0;
 			// SmartDashboard.putNumber("Right Arm Delta", delta);
 		}
+	}
+
+	@Override
+	public void controlLoopUpdate() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setPeriodMs(long periodMs) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

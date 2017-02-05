@@ -1,17 +1,11 @@
 package org.frc.team2579;
 
-import org.frc.team2579.buttons.XBoxTriggerButton;
-
+import org.frc.team2579.commands.ManipulatorFullyDeploy;
+import org.frc.team2579.commands.ManipulatorFullyRetract;
+import org.frc.team2579.commands.ManipulatorIntakeOff;
 import org.frc.team2579.controller.XboxController;
-import org.frc.team2579.subsystems.DriveTrain;
-import org.frc.team2579.subsystems.Intake;
-
-
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.InternalButton;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class OI {
 	private static OI instance;
@@ -26,6 +20,14 @@ public class OI {
 		m_operatorXBox = new XboxController(RobotMap.OPERATOR_XBOX_USB_ID);
 
 		// Driver's sticks
+		JoystickButton manipulatorFullyRetract = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.LEFT_BUMPER_BUTTON);
+        manipulatorFullyRetract.whenPressed(new ManipulatorFullyRetract());
+		
+        JoystickButton manipulatorFullyDeploy = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.RIGHT_BUMPER_BUTTON);
+        manipulatorFullyDeploy.whenPressed(new ManipulatorFullyDeploy());
+        manipulatorFullyDeploy.whenReleased(new ManipulatorIntakeOff());
+		
+		// Operator's Sticks
 
 	}
 

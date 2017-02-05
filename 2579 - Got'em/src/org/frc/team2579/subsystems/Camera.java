@@ -3,13 +3,10 @@ package org.frc.team2579.subsystems;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
-import org.frc.team2579.RobotMain;
-import org.frc.team2579.RobotMain.OperationMode;
 //import org.frc.team2579.vision.ImageProcessor;
 //import org.frc.team2579.vision.ImageProcessor.TargetInfo;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;

@@ -1,26 +1,24 @@
 package org.frc.team2579.subsystems;
 
-import java.util.ArrayList;
 //import org.frc.team2579.utility.CANTalonEncoder;
 import org.frc.team2579.OI;
-import org.frc.team2579.RobotMain;
 import org.frc.team2579.RobotMap;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.ctre.CANTalon;
-import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.CANTalon.TalonControlMode;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import org.frc.team2579.utility.ControlLoopable;
+
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class DriveTrain extends Subsystem {
+public class DriveTrain extends Subsystem implements ControlLoopable
+{
+	public static enum DriveTrainControlMode { JOYSTICK, MP_STRAIGHT, MP_TURN, PID_TURN, HOLD, TEST };
+
+	
 	// Input Device Constants
 	
 	public static final double DRIVER_JOY1_C1 = .0089;
@@ -28,9 +26,16 @@ public class DriveTrain extends Subsystem {
 	public static final double DRIVER_JOY1_C3 = 2.4126;
 	public static final double DRIVER_JOY1_DEADBAND = 10.0;
 	
+	private double m_moveInput = 0.0;
+	private double m_steerInput = 0.0;
+
+	private double m_moveOutput = 0.0;
+	private double m_steerOutput = 0.0;
+	
 	// Robot Intrinsics
 	
 	public static final double ENCODER_TICKS_TO_INCHES = 4096*Math.PI*4.0;
+	private DriveTrainControlMode controlMode = DriveTrainControlMode.JOYSTICK;
 	
 	// Motor controllers
 	//private ArrayList<CANTalonEncoder> motorControllers = new ArrayList<CANTalonEncoder>();
@@ -86,6 +91,45 @@ public class DriveTrain extends Subsystem {
 		}
 	}
 
+	public void setSpeed(double speed) {
+		if (speed == 0) {
+			setControlMode(DriveTrainControlMode.JOYSTICK);
+		}
+		else {
+			setControlMode(DriveTrainControlMode.TEST);
+			rightDrive1.set(speed);
+			leftDrive1.set(speed);
+		}
+	}
+	
+	public void driveWithJoystick() {
+		if(controlMode != DriveTrainControlMode.JOYSTICK || m_drive == null) return;
+		
+		m_moveInput = OI.getInstance().getOperatorXBox().getLeftYAxis();
+		m_steerInput = OI.getInstance().getOperatorXBox().getRightXAxis();
+
+		m_moveOutput = joystickSensitivityAdjust(m_moveInput, DRIVER_JOY1_C1, DRIVER_JOY1_C2, DRIVER_JOY1_C3
+				, DRIVER_JOY1_DEADBAND);
+		m_steerOutput = joystickSensitivityAdjust(m_steerInput, DRIVER_JOY1_C1, DRIVER_JOY1_C2, DRIVER_JOY1_C3
+				, DRIVER_JOY1_DEADBAND);
+		
+		m_drive.arcadeDrive(m_moveOutput, m_steerOutput);
+	}
+	
+	public void setControlMode(DriveTrainControlMode controlMode) {
+ 		this.controlMode = controlMode;
+		if (controlMode == DriveTrainControlMode.JOYSTICK) {
+			leftDrive1.changeControlMode(TalonControlMode.PercentVbus);
+			rightDrive1.changeControlMode(TalonControlMode.PercentVbus);
+		}
+		else if (controlMode == DriveTrainControlMode.TEST) {
+			leftDrive1.changeControlMode(TalonControlMode.PercentVbus);
+			rightDrive1.changeControlMode(TalonControlMode.PercentVbus);
+		}
+		else if (controlMode == DriveTrainControlMode.HOLD) {
+			
+		}
+	}
 	
 	@Override
 	public void initDefaultCommand() {
@@ -119,6 +163,23 @@ public class DriveTrain extends Subsystem {
 		
 		
 		
+		
+	}
+
+	public void resetGyro(){
+		MXP.reset();
+	}
+	
+	@Override
+	public void controlLoopUpdate() {
+		if (controlMode == DriveTrainControlMode.JOYSTICK) {
+			driveWithJoystick();
+		}
+	}
+
+	@Override
+	public void setPeriodMs(long periodMs) {
+		// TODO Auto-generated method stub
 		
 	}
 

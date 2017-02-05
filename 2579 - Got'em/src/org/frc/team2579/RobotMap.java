@@ -25,12 +25,12 @@ public class RobotMap {
 
 	public static final int CLIMBER_MOTOR_CAN_ID = 1;
 
-	public static final int MANIPULATOR_LEFT_MOTOR_CAN_ID = 2;
+	public static final int MANIPULATOR_MOTOR_CAN_ID = 2;
 
 	// PNEUMATICS
 	public static final int SHOOTER_POSITION_PCM_ID = 2;
 
-	public static final int INTAKE_UP_PCM_ID = 4;
-	public static final int INTAKE_DOWN_PCM_ID = 3;
+	public static final int INTAKE_UP_PCM_ID = 1;
+	public static final int INTAKE_DOWN_PCM_ID = 0;
 
 }
