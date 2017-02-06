@@ -4,7 +4,7 @@ package org.frc.team2579.subsystems;
 import org.frc.team2579.OI;
 import org.frc.team2579.RobotMap;
 
-//import com.kauailabs.navx.frc.AHRS;
+import com.kauailabs.navx.frc.AHRS;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 
@@ -48,7 +48,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 
 	private RobotDrive m_drive;
 
-	//private AHRS mxp = new AHRS(SPI.Port.kMXP);
+	private AHRS mxp = new AHRS(SPI.Port.kMXP);
 
 	public DriveTrain() {
 		try {
