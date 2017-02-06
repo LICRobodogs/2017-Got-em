@@ -3,7 +3,9 @@ package org.frc.team2579;
 import org.frc.team2579.commands.ManipulatorFullyDeploy;
 import org.frc.team2579.commands.ManipulatorFullyRetract;
 import org.frc.team2579.commands.ManipulatorIntakeOff;
+import org.frc.team2579.commands.ManipulatorSpeed;
 import org.frc.team2579.controller.XboxController;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
@@ -27,6 +29,12 @@ public class OI {
         manipulatorFullyDeploy.whenPressed(new ManipulatorFullyDeploy());
         manipulatorFullyDeploy.whenReleased(new ManipulatorIntakeOff());
 		
+        JoystickButton manipulatorSpeed = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.A_BUTTON);
+        manipulatorSpeed.whenPressed(new ManipulatorSpeed(1));
+        
+        JoystickButton manipulatorOutSpeed = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.B_BUTTON);
+        manipulatorOutSpeed.whenPressed(new ManipulatorSpeed(-1));
+        
 		// Operator's Sticks
 
 	}

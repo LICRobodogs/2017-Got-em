@@ -1,6 +1,6 @@
 package org.frc.team2579.subsystems;
 
-import org.frc.team2579.RobotMain;
+import org.frc.team2579.Robot;
 import org.frc.team2579.RobotMap;
 import org.frc.team2579.subsystems.Intake;
 
@@ -44,9 +44,9 @@ public class Shooter extends Subsystem {
 
 	}
 
-	public void updateStatus(RobotMain.OperationMode operationMode) {
+	public void updateStatus(Robot.OperationMode operationMode) {
 		SmartDashboard.putNumber("Shooter Speed: ", getWheelVelocity());
-		if (operationMode == RobotMain.OperationMode.TEST) {
+		if (operationMode == Robot.OperationMode.TEST) {
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package org.frc.team2579.commands;
 
-import org.frc.team2579.RobotMain;
+import org.frc.team2579.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class DriveTrainSpeed extends Command
@@ -8,12 +8,12 @@ public class DriveTrainSpeed extends Command
 	private double speed;
 	
     public DriveTrainSpeed(double speed) {
-        requires(RobotMain.driveTrain);
+        requires(Robot.driveTrain);
         this.speed = speed;
     }
 
     protected void initialize() {
-    	RobotMain.driveTrain.setSpeed(speed);
+    	Robot.driveTrain.setSpeed(speed);
     }
 
     protected void execute() {

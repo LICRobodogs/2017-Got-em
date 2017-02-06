@@ -23,9 +23,9 @@ public class RobotMap {
 
 	public static final int SHOOTER_MOTOR_CAN_ID = 8;
 
-	public static final int CLIMBER_MOTOR_CAN_ID = 1;
+	public static final int CLIMBER_MOTOR_CAN_ID = 2;
 
-	public static final int MANIPULATOR_MOTOR_CAN_ID = 2;
+	public static final int MANIPULATOR_MOTOR_CAN_ID = 1;
 
 	// PNEUMATICS
 	public static final int SHOOTER_POSITION_PCM_ID = 2;

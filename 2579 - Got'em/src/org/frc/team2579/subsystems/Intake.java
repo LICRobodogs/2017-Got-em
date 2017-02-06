@@ -1,6 +1,6 @@
 package org.frc.team2579.subsystems;
 
-import org.frc.team2579.RobotMain;
+import org.frc.team2579.Robot;
 import org.frc.team2579.RobotMap;
 
 import com.ctre.CANTalon;
@@ -50,8 +50,8 @@ public class Intake extends Subsystem {
 
 	}
 
-	public void updateStatus(RobotMain.OperationMode operationMode) {
-		if (operationMode == RobotMain.OperationMode.TEST) {
+	public void updateStatus(Robot.OperationMode operationMode) {
+		if (operationMode == Robot.OperationMode.TEST) {
 		}
 	}
 

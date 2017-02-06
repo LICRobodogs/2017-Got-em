@@ -1,6 +1,6 @@
 package org.frc.team2579.commands;
 
-import org.frc.team2579.RobotMain;
+import org.frc.team2579.Robot;
 import org.frc.team2579.subsystems.Manipulator.LiftState;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -9,13 +9,13 @@ public class ManipulatorPosition extends Command{
 private LiftState state;
 	
 	public ManipulatorPosition(LiftState state) {
-		requires(RobotMain.manipulator);
+		requires(Robot.manipulator);
 		this.state = state;
 	}
 
 	@Override
 	protected void initialize() {
-		RobotMain.manipulator.setPosition(state);
+		Robot.manipulator.setPosition(state);
 	}
 
 	@Override

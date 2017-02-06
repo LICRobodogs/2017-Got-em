@@ -4,7 +4,7 @@ package org.frc.team2579.subsystems;
 import org.frc.team2579.OI;
 import org.frc.team2579.RobotMap;
 
-import com.kauailabs.navx.frc.AHRS;
+//import com.kauailabs.navx.frc.AHRS;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
 
@@ -48,7 +48,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 
 	private RobotDrive m_drive;
 
-	private AHRS MXP = new AHRS(SPI.Port.kMXP);
+	//private AHRS mxp = new AHRS(SPI.Port.kMXP);
 
 	public DriveTrain() {
 		try {
@@ -81,8 +81,8 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 			//motorControllers.add(rightDrive1);
 
 			m_drive = new RobotDrive(leftDrive1, rightDrive1);
-			m_drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
-			m_drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+			m_drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
+			m_drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
 			m_drive.setSafetyEnabled(false);
 
 		} catch (Exception e) {
@@ -92,14 +92,14 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 	}
 
 	public void setSpeed(double speed) {
-		if (speed == 0) {
+		//if (speed == 0) {
 			setControlMode(DriveTrainControlMode.JOYSTICK);
-		}
+		/*}
 		else {
 			setControlMode(DriveTrainControlMode.TEST);
 			rightDrive1.set(speed);
 			leftDrive1.set(speed);
-		}
+		}*/
 	}
 	
 	public void driveWithJoystick() {
@@ -108,12 +108,15 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 		m_moveInput = OI.getInstance().getOperatorXBox().getLeftYAxis();
 		m_steerInput = OI.getInstance().getOperatorXBox().getRightXAxis();
 
+		/*
 		m_moveOutput = joystickSensitivityAdjust(m_moveInput, DRIVER_JOY1_C1, DRIVER_JOY1_C2, DRIVER_JOY1_C3
 				, DRIVER_JOY1_DEADBAND);
 		m_steerOutput = joystickSensitivityAdjust(m_steerInput, DRIVER_JOY1_C1, DRIVER_JOY1_C2, DRIVER_JOY1_C3
 				, DRIVER_JOY1_DEADBAND);
 		
 		m_drive.arcadeDrive(m_moveOutput, m_steerOutput);
+		*/
+		m_drive.arcadeDrive(-m_moveInput, -m_steerInput);
 	}
 	
 	public void setControlMode(DriveTrainControlMode controlMode) {
@@ -167,7 +170,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 	}
 
 	public void resetGyro(){
-		MXP.reset();
+		//mxp.reset();
 	}
 	
 	@Override

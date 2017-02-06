@@ -1,6 +1,6 @@
 package org.frc.team2579.commands;
 
-import org.frc.team2579.RobotMain;
+import org.frc.team2579.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class IntakeOuterSpeed extends Command
@@ -8,13 +8,13 @@ public class IntakeOuterSpeed extends Command
 	private double speed;
 	
 	public IntakeOuterSpeed(double speed) {
-		requires(RobotMain.intake);
+		requires(Robot.intake);
 		this.speed = speed;
 	}
 
 	@Override
 	protected void initialize() {
-		RobotMain.intake.setSpeedOuter(speed);
+		Robot.intake.setSpeedOuter(speed);
 	}
 
 	@Override

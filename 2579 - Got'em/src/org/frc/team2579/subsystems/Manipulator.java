@@ -1,6 +1,6 @@
 package org.frc.team2579.subsystems;
 
-import org.frc.team2579.RobotMain;
+import org.frc.team2579.Robot;
 import org.frc.team2579.RobotMap;
 import org.frc.team2579.utility.ControlLoopable;
 
@@ -54,9 +54,9 @@ public class Manipulator extends Subsystem implements ControlLoopable
 		// return isAtTarget;
 	}
 
-	public void updateStatus(RobotMain.OperationMode operationMode) {
+	public void updateStatus(Robot.OperationMode operationMode) {
 		// SmartDashboard.putString("Left Arm deg", leftArm.getPositionWorld());
-		if (operationMode == RobotMain.OperationMode.TEST) {
+		if (operationMode == Robot.OperationMode.TEST) {
 			// SmartDashboard.putBoolean("CDF Sensor", cdfSensor.get());
 			// MotionProfilePoint mpPoint = mpController.getCurrentPoint();
 			// double delta = mpPoint != null ? rightArm.getPositionWorld() -
