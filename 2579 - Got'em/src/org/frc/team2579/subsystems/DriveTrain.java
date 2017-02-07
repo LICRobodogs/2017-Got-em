@@ -24,7 +24,6 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 	public static final double DRIVER_JOY1_C1 = .0089;
 	public static final double DRIVER_JOY1_C2 = .0737;
 	public static final double DRIVER_JOY1_C3 = 2.4126;
-	public static final double DRIVER_JOY1_DEADBAND = 10.0;
 	
 	private double m_moveInput = 0.0;
 	private double m_steerInput = 0.0;
@@ -108,15 +107,12 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 		m_moveInput = OI.getInstance().getOperatorXBox().getLeftYAxis();
 		m_steerInput = OI.getInstance().getOperatorXBox().getRightXAxis();
 
-		/*
-		m_moveOutput = joystickSensitivityAdjust(m_moveInput, DRIVER_JOY1_C1, DRIVER_JOY1_C2, DRIVER_JOY1_C3
-				, DRIVER_JOY1_DEADBAND);
-		m_steerOutput = joystickSensitivityAdjust(m_steerInput, DRIVER_JOY1_C1, DRIVER_JOY1_C2, DRIVER_JOY1_C3
-				, DRIVER_JOY1_DEADBAND);
+		m_moveOutput = joystickSensitivityAdjust(m_moveInput, DRIVER_JOY1_C1, DRIVER_JOY1_C2, DRIVER_JOY1_C3);
+		m_steerOutput = joystickSensitivityAdjust(m_steerInput, DRIVER_JOY1_C1, DRIVER_JOY1_C2, DRIVER_JOY1_C3);
 		
-		m_drive.arcadeDrive(m_moveOutput, m_steerOutput);
-		*/
-		m_drive.arcadeDrive(-m_moveInput, -m_steerInput);
+		m_drive.arcadeDrive(-m_moveOutput, -m_steerOutput);
+		
+		// m_drive.arcadeDrive(-m_moveInput, -m_steerInput);
 	}
 	
 	public void setControlMode(DriveTrainControlMode controlMode) {
@@ -141,18 +137,19 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 	
 	
 	private double joystickSensitivityAdjust(double rawInput, double C1, double 
-			C2, double C3, double deadband) {
+			C2, double C3) {
 		// Accepts raw joystick input, outputs adjusted values based on
 		// nonlinear, 2nd order polynomial mapping.
 		
-		double adjustedOutput;
+		double adjustedOutput = 0.0;
 		
-		if (rawInput < deadband){
-			adjustedOutput = 0.0;
-		} else {
-			adjustedOutput = C1 * Math.pow(rawInput, 2) + C2 * rawInput + C3;
+		if (rawInput < 0){
+			adjustedOutput = (C1 * Math.pow(rawInput, 2) + C2 * rawInput + C3)/100;
 		}
-		
+		else if (rawInput > 0){
+			adjustedOutput = (C1 * Math.pow(rawInput, 2) + C2 * rawInput + C3)/-100;
+		}
+
 		return adjustedOutput;
 		
 	}
@@ -178,6 +175,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 		if (controlMode == DriveTrainControlMode.JOYSTICK) {
 			driveWithJoystick();
 		}
+
 	}
 
 	@Override
