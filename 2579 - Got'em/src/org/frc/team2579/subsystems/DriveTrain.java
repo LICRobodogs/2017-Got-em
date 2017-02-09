@@ -1,22 +1,28 @@
 package org.frc.team2579.subsystems;
 
+import java.util.*;
+
+
 //import org.frc.team2579.utility.CANTalonEncoder;
 import org.frc.team2579.OI;
 import org.frc.team2579.RobotMap;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.ctre.CANTalon;
+import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.CANTalon.TalonControlMode;
 
 import org.frc.team2579.utility.ControlLoopable;
 
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class DriveTrain extends Subsystem implements ControlLoopable
 {
-	public static enum DriveTrainControlMode { JOYSTICK, MP_STRAIGHT, MP_TURN, PID_TURN, HOLD, TEST };
+	public static enum DriveTrainControlMode { JOYSTICK, AUTON, HOLD, TEST };
 
 	
 	// Input Device Constants
@@ -31,10 +37,37 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 	private double m_moveOutput = 0.0;
 	private double m_steerOutput = 0.0;
 	
+	//NavX
+	
+	private AHRS mxp = new AHRS(SPI.Port.kMXP);
+	
 	// Robot Intrinsics
 	
 	public static final double ENCODER_TICKS_TO_INCHES = 4096*Math.PI*4.0;
 	private DriveTrainControlMode controlMode = DriveTrainControlMode.JOYSTICK;
+	
+	public static final double LEFT_P = .1;
+	public static final double LEFT_I = 0.0;
+	public static final double LEFT_D = 0.0;
+	public static final double LEFT_F = 1.0;
+	public static final double DISTANCE_CONTROL_PERIOD = 10;
+	
+	public static final double HEADING_CONTROL_P = .1;
+	public static final double HEADING_CONTROL_I = 0.0;
+	public static final double HEADING_CONTROL_D = 0.0;
+	public static final double HEADING_CONTROL_F = 1.0;
+	public static final double HEADING_CONTROL_PERIOD = 50;
+	
+	
+
+    private final PIDOutput headingControlPIDOut = new PIDOutput() {
+        public void pidWrite(double d) {
+        }
+    };
+
+	PIDController headingControlPID = new PIDController(HEADING_CONTROL_P, HEADING_CONTROL_I, HEADING_CONTROL_D, mxp, 
+			headingControlPIDOut, HEADING_CONTROL_PERIOD);
+	
 	
 	// Motor controllers
 	//private ArrayList<CANTalonEncoder> motorControllers = new ArrayList<CANTalonEncoder>();
@@ -47,8 +80,10 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 
 	private RobotDrive m_drive;
 
-	private AHRS mxp = new AHRS(SPI.Port.kMXP);
+	
 
+	private List<double[]> autonDesiresList = new ArrayList<double[]>(); 
+	
 	public DriveTrain() {
 		try {
 			leftDrive1 = new CANTalon(RobotMap.DRIVETRAIN_LEFT_MOTOR1_CAN_ID);
@@ -74,10 +109,10 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 
 			rightDrive1.enableBrakeMode(true);
 			rightDrive2.enableBrakeMode(true);
+			
+			leftDrive1.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+			rightDrive1.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 
-
-			//motorControllers.add(leftDrive1);
-			//motorControllers.add(rightDrive1);
 
 			m_drive = new RobotDrive(leftDrive1, rightDrive1);
 			m_drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
@@ -128,6 +163,10 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 		else if (controlMode == DriveTrainControlMode.HOLD) {
 			
 		}
+		else if (controlMode == DriveTrainControlMode.AUTON) {
+			leftDrive1.changeControlMode(TalonControlMode.MotionProfile);
+			rightDrive1.changeControlMode(TalonControlMode.MotionProfile);
+		}
 	}
 	
 	@Override
@@ -154,17 +193,26 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 		
 	}
 		
-	public void moveDistAtAngle(double distanceDesire, double angleDesire){
-		// Moves robot distanceDesire at angleDesire from current position and heading
-		// distanceDesire in inches, angleDesire in degrees where CCW is positive
-		
-		
-		
-		
-		
-		
+	public void addMoveDistance(double distanceDesire){
+		// accepts distance (inches), adds move distance command to auton routine
+		// note that distance gets transformed to ticks
+		double distanceDesireTicks = distanceDesire * ENCODER_TICKS_TO_INCHES;
+		double[] waypoint = new double[]{distanceDesire, 0};
+		autonDesiresList.add(waypoint);
+	}
+	
+	public void addTurnAngle(double angleDesire){
+		// accepts angle (degrees), adds turn command to auton routine
+		// note that angle gets transformed to radians
+		double angleDesireRad = angleDesire * Math.PI/180;
+		double[] waypoint = new double[]{0, angleDesireRad};
+		autonDesiresList.add(waypoint);
+	}	
+	
+	public void executeMovement(){
 		
 	}
+		
 
 	public void resetGyro(){
 		//mxp.reset();
@@ -174,6 +222,9 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 	public void controlLoopUpdate() {
 		if (controlMode == DriveTrainControlMode.JOYSTICK) {
 			driveWithJoystick();
+		}
+		else if (controlMode == DriveTrainControlMode.AUTON) {
+			executeMovement();
 		}
 
 	}

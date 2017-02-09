@@ -5,7 +5,7 @@ import org.frc.team2579.subsystems.DriveTrain;
 import org.frc.team2579.subsystems.Intake;
 import org.frc.team2579.subsystems.Manipulator;
 import org.frc.team2579.subsystems.Shooter;
-
+import org.frc.team2579.subsystems.DriveTrain.DriveTrainControlMode;
 import org.frc.team2579.utility.ControlLooper;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -57,13 +57,13 @@ public class Robot extends IterativeRobot {
 	
 	public void autonomousInit() {
 	        // Schedule the autonomous command (example)
+		Robot.driveTrain.setControlMode(DriveTrainControlMode.AUTON);
 	    controlLoop.start();
-	    manipulator.setZeroPosition();
-	    driveTrain.resetGyro();
 	 }
 	 
 	public void teleopInit() {
-	    controlLoop.start();
+		Robot.driveTrain.setControlMode(DriveTrainControlMode.JOYSTICK);
+		controlLoop.start();
 	}
 	/**
 	 * This function is called periodically during operator control
