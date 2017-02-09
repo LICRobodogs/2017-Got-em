@@ -90,10 +90,13 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 		try {
 			leftDrive1 = new CANTalon(RobotMap.DRIVETRAIN_LEFT_MOTOR1_CAN_ID);
 			leftDrive2 = new CANTalon(RobotMap.DRIVETRAIN_LEFT_MOTOR2_CAN_ID);
-
+			leftDrive1.setPID(LEFT_P, LEFT_I, LEFT_D);
+			
+			
 			rightDrive1 = new CANTalon(RobotMap.DRIVETRAIN_RIGHT_MOTOR1_CAN_ID);
 			rightDrive2 = new CANTalon(RobotMap.DRIVETRAIN_RIGHT_MOTOR2_CAN_ID);
-
+			rightDrive1.setPID(RIGHT_P, RIGHT_I, RIGHT_D);
+			
 			leftDrive2.changeControlMode(TalonControlMode.Follower);
 			leftDrive2.set(leftDrive1.getDeviceID());
 
