@@ -47,17 +47,17 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 	private DriveTrainControlMode controlMode = DriveTrainControlMode.JOYSTICK;
 	
 	public static final double LEFT_P = .1;
-	public static final double LEFT_I = 0.0;
-	public static final double LEFT_D = 0.0;
+	public static final double LEFT_I = 0.001;
+	public static final double LEFT_D = 1.0;
 	
 	public static final double RIGHT_P = .1;
-	public static final double RIGHT_I = 0.0;
-	public static final double RIGHT_D = 0.0;
+	public static final double RIGHT_I = 0.001;
+	public static final double RIGHT_D = 1.0;
 	
 	public static final double HEADING_CONTROL_P = .1;
-	public static final double HEADING_CONTROL_I = 0.0;
-	public static final double HEADING_CONTROL_D = 0.0;
-	public static final double HEADING_CONTROL_F = 1.0;
+	public static final double HEADING_CONTROL_I = 0.001;
+	public static final double HEADING_CONTROL_D = 1.0;
+	public static final double HEADING_CONTROL_F = 0.0001;
 	public static final double HEADING_CONTROL_PERIOD = 50;
 	
 	
@@ -115,8 +115,8 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 			rightDrive1.enableBrakeMode(true);
 			rightDrive2.enableBrakeMode(true);
 			
-			leftDrive1.setFeedbackDevice(FeedbackDevice.QuadEncoder);
-			rightDrive1.setFeedbackDevice(FeedbackDevice.QuadEncoder);
+			leftDrive1.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
+			rightDrive1.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 
 
 			m_drive = new RobotDrive(leftDrive1, rightDrive1);
