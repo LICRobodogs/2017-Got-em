@@ -49,8 +49,10 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 	public static final double LEFT_P = .1;
 	public static final double LEFT_I = 0.0;
 	public static final double LEFT_D = 0.0;
-	public static final double LEFT_F = 1.0;
-	public static final double DISTANCE_CONTROL_PERIOD = 10;
+	
+	public static final double RIGHT_P = .1;
+	public static final double RIGHT_I = 0.0;
+	public static final double RIGHT_D = 0.0;
 	
 	public static final double HEADING_CONTROL_P = .1;
 	public static final double HEADING_CONTROL_I = 0.0;
