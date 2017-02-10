@@ -41,10 +41,19 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 	
 	private AHRS mxp = new AHRS(SPI.Port.kMXP);
 	
+	
+	// Set control mode
+	private DriveTrainControlMode controlMode = DriveTrainControlMode.JOYSTICK;
+	
 	// Robot Intrinsics
 	
 	public static final double ENCODER_TICKS_TO_INCHES = 4096*Math.PI*4.0;
-	private DriveTrainControlMode controlMode = DriveTrainControlMode.JOYSTICK;
+	public static final double MAX_AUTON_VELOCITY = 10.0 * 12 * ENCODER_TICKS_TO_INCHES/.1; // in ticks/100ms 
+	public static final double MAX_AUTON_ACCEL = 3.0 * 12 * ENCODER_TICKS_TO_INCHES/.1; // in ticks/(100ms)^2
+	public static final double MAX_ACCEL_TIME = MAX_AUTON_VELOCITY/MAX_AUTON_ACCEL; // in 100s of ms
+	public static final double MAX_ACCEL_DIST = .5 * MAX_AUTON_ACCEL * MAX_ACCEL_TIME * MAX_ACCEL_TIME; // in ticks
+
+	public static final double WHEEL_TO_WHEEL_DIST = 20.0; // inches TEMP VALUE
 	
 	public static final double LEFT_P = .1;
 	public static final double LEFT_I = 0.001;
@@ -57,7 +66,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 	public static final double HEADING_CONTROL_P = .1;
 	public static final double HEADING_CONTROL_I = 0.001;
 	public static final double HEADING_CONTROL_D = 1.0;
-	public static final double HEADING_CONTROL_F = 0.0001;
+	public static final double HEADING_CONTROL_MAX_ERROR = 3.0; // in degrees
 	public static final double HEADING_CONTROL_PERIOD = 50;
 	
 	
@@ -69,7 +78,6 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 
 	PIDController headingControlPID = new PIDController(HEADING_CONTROL_P, HEADING_CONTROL_I, HEADING_CONTROL_D, mxp, 
 			headingControlPIDOut, HEADING_CONTROL_PERIOD);
-	
 	
 	// Motor controllers
 	//private ArrayList<CANTalonEncoder> motorControllers = new ArrayList<CANTalonEncoder>();
@@ -123,6 +131,11 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 			m_drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
 			m_drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
 			m_drive.setSafetyEnabled(false);
+			
+			headingControlPID.setInputRange(-180.0f, 180.0f);
+			headingControlPID.setOutputRange(-180.0f, 180.0f);
+			headingControlPID.setAbsoluteTolerance(HEADING_CONTROL_MAX_ERROR);
+			headingControlPID.setContinuous();
 
 		} catch (Exception e) {
 			System.err
@@ -179,7 +192,6 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 		// This needs to be here for reasons.
 	}
 	
-	
 	private double joystickSensitivityAdjust(double rawInput, double C1, double 
 			C2, double C3) {
 		// Accepts raw joystick input, outputs adjusted values based on
@@ -207,7 +219,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 	}
 	
 	public void addTurnAngle(double angleDesire){
-		// accepts angle (degrees), adds turn command to auton routine
+		// accepts absolute heading angle (degrees), adds turn command to auton routine
 		// note that angle gets transformed to radians
 		double angleDesireRad = angleDesire * Math.PI/180;
 		double[] waypoint = new double[]{0, angleDesireRad};
@@ -215,14 +227,42 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 	}	
 	
 	public void executeMovement(){
-		
-	}
-		
-
-	public void resetGyro(){
-		//mxp.reset();
+		double[] waypoint = autonDesiresList.get(0);
+		if (waypoint[0] == 0.0){
+			// turn desired
+		} else if (waypoint[1] == 0.0){
+			// straight desired
+		} else {
+			System.out.println("Auton routine waypoints exhausted.");
+		}
 	}
 	
+	private void generateTurnPath(double targetAngle){
+		double leftVel = leftDrive1.getEncVelocity();
+		double rightVel = rightDrive1.getEncVelocity();
+		double leftPos = leftDrive1.getEncPosition();
+		double rightPos = rightDrive1.getEncPosition();
+		double mxpYaw = mxp.getYaw()* Math.PI/180;
+		
+		double deltaLeftRight = (targetAngle - mxpYaw) *
+				WHEEL_TO_WHEEL_DIST * ENCODER_TICKS_TO_INCHES ; // positive is left wheel moving more, in ticks
+		
+		
+		if (Math.Abs(deltaLeftRight) < 100){
+			// REMOVE POINT
+		} else {
+			getNextPoint();
+		}
+		if (Math.abs(deltaLeftRight) > MAX_ACCEL_DIST){
+
+		}
+	}
+	
+	private void getNextPoint(){
+		
+	}
+	
+
 	@Override
 	public void controlLoopUpdate() {
 		if (controlMode == DriveTrainControlMode.JOYSTICK) {

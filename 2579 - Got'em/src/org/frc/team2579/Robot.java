@@ -58,11 +58,13 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 	        // Schedule the autonomous command (example)
 		Robot.driveTrain.setControlMode(DriveTrainControlMode.AUTON);
+		driveTrain.setPeriodMs(50);
 	    controlLoop.start();
 	 }
 	 
 	public void teleopInit() {
 		Robot.driveTrain.setControlMode(DriveTrainControlMode.JOYSTICK);
+		driveTrain.setPeriodMs(10);
 		controlLoop.start();
 	}
 	/**
