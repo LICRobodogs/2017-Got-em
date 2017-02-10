@@ -1,5 +1,7 @@
 package org.frc.team2579;
 
+import org.frc.team2579.commands.ClimbOff;
+import org.frc.team2579.commands.ClimbUp;
 import org.frc.team2579.commands.ClimberSpeed;
 import org.frc.team2579.commands.ManipulatorFullyDeploy;
 import org.frc.team2579.commands.ManipulatorFullyRetract;
@@ -29,7 +31,7 @@ public class OI {
         manipulatorFullyRetract.whenPressed(new ManipulatorFullyRetract());
 		
         JoystickButton manipulatorFullyDeploy = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.RIGHT_BUMPER_BUTTON);
-        manipulatorFullyDeploy.whenPressed(new ManipulatorFullyDeploy());
+        manipulatorFullyDeploy.whileHeld(new ManipulatorFullyDeploy());
         manipulatorFullyDeploy.whenReleased(new ManipulatorIntakeOff());
 		
         JoystickButton manipulatorSpeed = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.A_BUTTON);
@@ -38,8 +40,10 @@ public class OI {
         JoystickButton manipulatorOutSpeed = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.B_BUTTON);
         manipulatorOutSpeed.whenPressed(new ManipulatorSpeed(Manipulator.INTAKE_EJECT_SPEED));
         
-        JoystickButton climberSpeed = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.X_BUTTON);
-        climberSpeed.whenPressed(new ClimberSpeed(Climber.CLIMB_SPEED));
+        JoystickButton climb = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.X_BUTTON);
+        climb.whileHeld(new ClimbUp());
+        climb.whenReleased(new ClimbOff());
+        
         
 		// Operator's Sticks
 
