@@ -9,13 +9,5 @@
 	<classpathentry kind="var" path="USERLIBS_DIR/CTRLib.jar"/>
 	<classpathentry exported="true" kind="lib" path="/Users/Nikita/wpilib/java/current/lib/navx_frc.jar"/>
 	<classpathentry kind="var" path="USERLIBS_DIR/navx_frc.jar"/>
-	<classpathentry kind="var" path="USERLIBS_DIR/cscore-sources.jar"/>
-	<classpathentry kind="var" path="USERLIBS_DIR/cscore.jar"/>
-	<classpathentry kind="var" path="USERLIBS_DIR/NetworkTables-sources.jar"/>
-	<classpathentry kind="var" path="USERLIBS_DIR/NetworkTables.jar"/>
-	<classpathentry kind="var" path="USERLIBS_DIR/opencv-sources.jar"/>
-	<classpathentry kind="var" path="USERLIBS_DIR/opencv.jar"/>
-	<classpathentry kind="var" path="USERLIBS_DIR/WPILib-sources.jar"/>
-	<classpathentry kind="var" path="USERLIBS_DIR/WPILib.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

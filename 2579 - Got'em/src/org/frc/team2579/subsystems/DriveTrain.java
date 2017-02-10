@@ -202,7 +202,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 		// accepts distance (inches), adds move distance command to auton routine
 		// note that distance gets transformed to ticks
 		double distanceDesireTicks = distanceDesire * ENCODER_TICKS_TO_INCHES;
-		double[] waypoint = new double[]{distanceDesire, 0};
+		double[] waypoint = new double[]{distanceDesireTicks, 0};
 		autonDesiresList.add(waypoint);
 	}
 	
