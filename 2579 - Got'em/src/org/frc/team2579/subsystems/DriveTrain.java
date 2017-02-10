@@ -248,7 +248,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 				WHEEL_TO_WHEEL_DIST * ENCODER_TICKS_TO_INCHES ; // positive is left wheel moving more, in ticks
 		
 		
-		if (Math.Abs(deltaLeftRight) < 100){
+		if (Math.abs(deltaLeftRight) < 100){
 			// REMOVE POINT
 		} else {
 			getNextPoint();
