@@ -163,7 +163,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 		m_moveOutput = joystickSensitivityAdjust(m_moveInput, DRIVER_JOY1_C1, DRIVER_JOY1_C2, DRIVER_JOY1_C3);
 		m_steerOutput = joystickSensitivityAdjust(m_steerInput, DRIVER_JOY1_C1, DRIVER_JOY1_C2, DRIVER_JOY1_C3);
 		
-		m_drive.arcadeDrive(m_moveOutput, m_steerOutput);
+		m_drive.arcadeDrive(-m_moveOutput, -m_steerOutput);
 		
 		// m_drive.arcadeDrive(-m_moveInput, -m_steerInput);
 	}
@@ -200,7 +200,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 		double adjustedOutput = 0.0;
 		
 		if (rawInput < 0){
-			adjustedOutput = (C1 * Math.pow(rawInput, 2) + C2 * rawInput + C3);
+			adjustedOutput = -(C1 * Math.pow(rawInput, 2) + C2 * rawInput + C3);
 		}
 		else if (rawInput > 0){
 			adjustedOutput = (C1 * Math.pow(rawInput, 2) + C2 * rawInput + C3);

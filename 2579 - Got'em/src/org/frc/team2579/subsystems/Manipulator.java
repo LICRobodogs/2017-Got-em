@@ -13,7 +13,7 @@ public class Manipulator extends Subsystem implements ControlLoopable
 {
 	public static enum LiftState { UP, DOWN };
 	public static final double INTAKE_LOAD_SPEED = 1;
-	public static final double INTAKE_EJECT_SPEED = 1;
+	public static final double INTAKE_EJECT_SPEED = -1;
 	private CANTalon roller;
 	private DoubleSolenoid manipulator;
 	

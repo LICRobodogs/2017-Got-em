@@ -50,7 +50,7 @@ public class XboxController {
 	private static final double LEFT_AXIS_RIGHT_TOLERANCE = 0.9;
 	private static final double LEFT_AXIS_LEFT_TOLERANCE = -0.9;
 
-	private static final double DEADZONE = 0.1;
+	private static final double DEADZONE = 0.20;
 
 	private Joystick stick;
 
