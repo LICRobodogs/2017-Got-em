@@ -1,5 +1,7 @@
 package org.frc.team2579;
 
+import org.frc.team2579.commands.BallStopIn;
+import org.frc.team2579.commands.BallStopOut;
 import org.frc.team2579.commands.ClimbOff;
 import org.frc.team2579.commands.ClimbUp;
 import org.frc.team2579.commands.ClimberSpeed;
@@ -44,6 +46,11 @@ public class OI {
         climb.whileHeld(new ClimbUp());
         climb.whenReleased(new ClimbOff());
         
+        JoystickButton ballStopIn = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.BACK_BUTTON);
+        ballStopIn.whenPressed(new BallStopIn());
+        
+        JoystickButton ballStopOut = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.START_BUTTON);
+        ballStopOut.whenPressed(new BallStopOut());
         
 		// Operator's Sticks
 

@@ -5,6 +5,8 @@ import org.frc.team2579.RobotMap;
 
 import com.ctre.CANTalon;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -18,7 +20,7 @@ public class Intake extends Subsystem {
 	public static final double OUTER_INTAKE_EJECT_SPEED = -0.4;
 	public static final double INNER_INTAKE_EJECT_SPEED = -0.4;
 
-	private static Solenoid ballStop;
+	private static DoubleSolenoid ballStop;
 	private CANTalon outerRoller, innerRoller;
 
 	public Intake() {
@@ -31,7 +33,7 @@ public class Intake extends Subsystem {
 			outerRoller.enableBrakeMode(true);
 			innerRoller.enableBrakeMode(true);
 
-			ballStop = new Solenoid(RobotMap.SHOOTER_POSITION_PCM_ID);
+			ballStop = new DoubleSolenoid(RobotMap.SHOOTER_POSITION_OUT_PCM_ID,RobotMap.SHOOTER_POSITION_IN_PCM_ID);
 		} catch (Exception e) {
 			System.err.println("An error occurred in the Intake constructor");
 		}
@@ -56,14 +58,14 @@ public class Intake extends Subsystem {
 	}
 
 	public static boolean getBallStop() {
-		return ballStop.get();
+		return ballStop.get() == Value.kForward;
 	}
 
 	public void setBallStop(BallStopState state) {
 		if(state == BallStopState.IN) {
-			ballStop.set(true);
+			ballStop.set(Value.kForward);
 		} else if(state == BallStopState.OUT) {
-			ballStop.set(false);
+			ballStop.set(Value.kReverse);
 		}
 	}
 }

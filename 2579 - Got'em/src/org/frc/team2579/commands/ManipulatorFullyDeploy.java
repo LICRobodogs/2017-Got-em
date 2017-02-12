@@ -9,5 +9,6 @@ public class ManipulatorFullyDeploy extends CommandGroup {
     
     public ManipulatorFullyDeploy() {
         addSequential(new ManipulatorPosition(LiftState.DOWN));
-        addSequential(new ManipulatorSpeed(Manipulator.INTAKE_LOAD_SPEED));
-    }}
+        addParallel(new ManipulatorSpeed(Manipulator.INTAKE_LOAD_SPEED));
+    }
+}
