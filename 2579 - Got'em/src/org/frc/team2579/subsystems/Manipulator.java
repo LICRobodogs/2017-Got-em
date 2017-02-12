@@ -8,12 +8,14 @@ import com.ctre.CANTalon;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Manipulator extends Subsystem implements ControlLoopable
 {
 	public static enum LiftState { UP, DOWN };
 	public static final double INTAKE_LOAD_SPEED = 1;
 	public static final double INTAKE_EJECT_SPEED = -1;
+	public static String currState = "UP";
 	private CANTalon roller;
 	private DoubleSolenoid manipulator;
 	
@@ -37,8 +39,10 @@ public class Manipulator extends Subsystem implements ControlLoopable
 	public void setPosition(LiftState state) {
 		if(state == LiftState.UP) {
 			manipulator.set(Value.kForward);
+			currState = "UP";
 		} else if(state == LiftState.DOWN) {
 			manipulator.set(Value.kReverse);
+			currState = "DOWN";
 		}
 	}
 	
@@ -54,10 +58,13 @@ public class Manipulator extends Subsystem implements ControlLoopable
 		// return isAtTarget;
 	}
 
+	public String getState(){
+		return currState;
+	}
 	public void updateStatus(Robot.OperationMode operationMode) {
 		// SmartDashboard.putString("Left Arm deg", leftArm.getPositionWorld());
 		if (operationMode == Robot.OperationMode.TEST) {
-			// SmartDashboard.putBoolean("CDF Sensor", cdfSensor.get());
+			SmartDashboard.putString("Gear Intake State: ", getState());
 			// MotionProfilePoint mpPoint = mpController.getCurrentPoint();
 			// double delta = mpPoint != null ? rightArm.getPositionWorld() -
 			// mpController.getCurrentPoint().position : 0;

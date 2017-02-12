@@ -5,6 +5,7 @@ import java.util.*;
 
 //import org.frc.team2579.utility.CANTalonEncoder;
 import org.frc.team2579.OI;
+import org.frc.team2579.Robot;
 import org.frc.team2579.RobotMap;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain extends Subsystem implements ControlLoopable
 {
@@ -278,6 +280,14 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 	public void setPeriodMs(long periodMs) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void updateStatus(Robot.OperationMode operationMode) {
+		if (operationMode == Robot.OperationMode.TEST) {
+			SmartDashboard.putNumber("Current Robot Angle: ", mxp.getYaw());
+			SmartDashboard.putNumber("Current Left Robot Drive: ", leftDrive1.getPosition());
+			SmartDashboard.putNumber("Current Right Robot Drive: ", rightDrive1.getPosition());
+		}
 	}
 
 }

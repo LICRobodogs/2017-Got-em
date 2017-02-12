@@ -37,7 +37,7 @@ public class Robot extends IterativeRobot {
 		TEST, COMPETITION
 	};
 
-	public static OperationMode operationMode = OperationMode.COMPETITION;
+	public static OperationMode operationMode = OperationMode.TEST;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -75,10 +75,11 @@ public class Robot extends IterativeRobot {
 	 */
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		updateStatus();
 	}
 
 	public void updateStatus() {
-		//driveTrain.updateStatus(operationMode);
+		driveTrain.updateStatus(operationMode);
 		intake.updateStatus(operationMode);
 		manipulator.updateStatus(operationMode);
 		//shooter.updateStatus(operationMode);
