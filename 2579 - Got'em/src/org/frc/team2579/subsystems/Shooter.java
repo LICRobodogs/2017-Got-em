@@ -1,8 +1,11 @@
 package org.frc.team2579.subsystems;
 
+import org.frc.team2579.OI;
 import org.frc.team2579.Robot;
 import org.frc.team2579.RobotMap;
 import org.frc.team2579.subsystems.Intake;
+import org.frc.team2579.subsystems.DriveTrain.DriveTrainControlMode;
+import org.frc.team2579.utility.ControlLoopable;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
@@ -10,8 +13,12 @@ import com.ctre.CANTalon.FeedbackDevice;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Shooter extends Subsystem {
+public class Shooter extends Subsystem implements ControlLoopable{
 
+	public static enum ShooterControlMode { JOYSTICK, AUTON, HOLD, TEST };
+	
+	private ShooterControlMode controlMode = ShooterControlMode.JOYSTICK;
+	
 	private CANTalon wheel;
 	
 	public static double mFlywheelOnTargetTolerance = 100;
@@ -27,14 +34,14 @@ public class Shooter extends Subsystem {
 		try {
 			wheel = new CANTalon(RobotMap.SHOOTER_MOTOR_CAN_ID);
 			wheel.enableBrakeMode(false);
-			wheel.reverseSensor(true);
 			
 			wheel.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
 			wheel.setPID(mFlywheelKp, mFlywheelKi, mFlywheelKd,mFlywheelKf,mFlywheelIZone,mFlywheelRampRate,0);
-			wheel.setProfile(0);
+			//wheel.setProfile(0);
 			wheel.reverseSensor(false);
 	        wheel.reverseOutput(false);
-	        wheel.setVoltageRampRate(36.0);
+	        //wheel.setVoltageRampRate(36.0);
+	        resetWheelEncoder();
 		} catch (Exception e) {
 			System.err.println("An error occurred in the Shooter constructor");
 		}
@@ -82,5 +89,27 @@ public class Shooter extends Subsystem {
 
 	private double getSetpoint() {
 		return wheel.getSetpoint();
+	}
+
+	@Override
+	public void controlLoopUpdate() {
+		if (controlMode == ShooterControlMode.JOYSTICK) {
+			shootWithJoystick();
+		}
+		else if (controlMode == ShooterControlMode.AUTON) {
+			//executeMovement();
+		}
+		
+	}
+
+	private void shootWithJoystick() {
+		setOpenLoop(OI.getInstance().getOperatorXBox().getRightTriggerAxis());
+		
+	}
+
+	@Override
+	public void setPeriodMs(long periodMs) {
+		// TODO Auto-generated method stub
+		
 	}
 }

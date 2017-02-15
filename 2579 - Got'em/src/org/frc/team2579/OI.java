@@ -5,12 +5,15 @@ import org.frc.team2579.commands.BallStopOut;
 import org.frc.team2579.commands.ClimbOff;
 import org.frc.team2579.commands.ClimbUp;
 import org.frc.team2579.commands.ClimberSpeed;
+import org.frc.team2579.commands.IntakeOuterSpeed;
 import org.frc.team2579.commands.ManipulatorFullyDeploy;
 import org.frc.team2579.commands.ManipulatorFullyRetract;
 import org.frc.team2579.commands.ManipulatorIntakeOff;
 import org.frc.team2579.commands.ManipulatorSpeed;
+import org.frc.team2579.commands.ShooterSpeed;
 import org.frc.team2579.controller.XboxController;
 import org.frc.team2579.subsystems.Climber;
+import org.frc.team2579.subsystems.Intake;
 import org.frc.team2579.subsystems.Manipulator;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -51,6 +54,13 @@ public class OI {
         
         JoystickButton ballStopOut = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.START_BUTTON);
         ballStopOut.whenPressed(new BallStopOut());
+        
+        JoystickButton outerIntakeIn = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.Y_BUTTON);
+        outerIntakeIn.whenPressed(new IntakeOuterSpeed(Intake.OUTER_INTAKE_LOAD_SPEED));
+        outerIntakeIn.whenReleased(new IntakeOuterSpeed(0));
+        
+        JoystickButton shooterShoot = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.RIGHT_TRIGGER_AXIS);
+        shooterShoot.whenPressed(new ShooterSpeed(XboxController.RIGHT_TRIGGER_AXIS));
         
 		// Operator's Sticks
 

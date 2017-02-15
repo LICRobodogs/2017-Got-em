@@ -46,6 +46,7 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		controlLoop.addLoopable(driveTrain);
     	controlLoop.addLoopable(manipulator);
+    	controlLoop.addLoopable(shooter);
 		/*
 		 * the Talons on the left-side of my robot needs to drive reverse(red)
 		 * to move robot forward. Since _leftSlave just follows frontLeftMotor,
@@ -82,7 +83,7 @@ public class Robot extends IterativeRobot {
 		driveTrain.updateStatus(operationMode);
 		intake.updateStatus(operationMode);
 		manipulator.updateStatus(operationMode);
-		//shooter.updateStatus(operationMode);
+		shooter.updateStatus(operationMode);
 		//camera.updateStatus(operationMode);
 	}
 }
