@@ -5,6 +5,7 @@ import org.frc.team2579.commands.BallStopOut;
 import org.frc.team2579.commands.ClimbOff;
 import org.frc.team2579.commands.ClimbUp;
 import org.frc.team2579.commands.ClimberSpeed;
+import org.frc.team2579.commands.IntakeInnerSpeed;
 import org.frc.team2579.commands.IntakeOff;
 import org.frc.team2579.commands.IntakeOuterSpeed;
 import org.frc.team2579.commands.ManipulatorFullyDeploy;
@@ -40,9 +41,6 @@ public class OI {
         JoystickButton manipulatorFullyDeploy = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.RIGHT_BUMPER_BUTTON);
         manipulatorFullyDeploy.whileHeld(new ManipulatorFullyDeploy());
         manipulatorFullyDeploy.whenReleased(new ManipulatorIntakeOff());
-		
-        JoystickButton manipulatorSpeed = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.A_BUTTON);
-        manipulatorSpeed.whenPressed(new ManipulatorSpeed(Manipulator.INTAKE_LOAD_SPEED));
         
         JoystickButton manipulatorOutSpeed = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.B_BUTTON);
         manipulatorOutSpeed.whenPressed(new ManipulatorSpeed(Manipulator.INTAKE_EJECT_SPEED));
@@ -56,6 +54,10 @@ public class OI {
         
         JoystickButton ballStopOut = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.START_BUTTON);
         ballStopOut.whenPressed(new BallStopOut());
+        
+        JoystickButton innerIntakeIn = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.A_BUTTON);
+        innerIntakeIn.whileHeld(new IntakeInnerSpeed(Intake.INNER_INTAKE_LOAD_SPEED));
+        innerIntakeIn.whenReleased(new IntakeOff());
         
         JoystickButton outerIntakeIn = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.Y_BUTTON);
         outerIntakeIn.whileHeld(new IntakeOuterSpeed(Intake.OUTER_INTAKE_LOAD_SPEED));
