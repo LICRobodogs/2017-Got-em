@@ -68,4 +68,11 @@ public class Intake extends Subsystem {
 			ballStop.set(Value.kReverse);
 		}
 	}
+	
+	public void feedWithCheck(){
+		if(Robot.shooter.isOnTarget() && getBallStop())
+			setSpeedInner(1);
+		else 
+			setSpeedInner(0);
+	}
 }

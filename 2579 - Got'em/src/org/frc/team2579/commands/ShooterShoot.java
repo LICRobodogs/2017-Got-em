@@ -1,0 +1,20 @@
+package org.frc.team2579.commands;
+
+import org.frc.team2579.subsystems.Shooter;
+import org.frc.team2579.subsystems.Shooter.ShooterControlMode;
+
+import edu.wpi.first.wpilibj.command.CommandGroup;
+
+public class ShooterShoot extends CommandGroup {
+    
+    public ShooterShoot() {
+        addSequential(new ShooterMode(ShooterControlMode.SENSORED));
+        addSequential(new BallStopIn());
+        //addParallel(new ShooterSpeed(Shooter.BOILER_RPM_SETPOINT));
+        addParallel(new ShooterPID());
+        addSequential(new FeedShooter());
+        addSequential(new ShooterMode(ShooterControlMode.MANUAL));
+        addSequential(new ShooterSpeed(0));
+        }
+
+}

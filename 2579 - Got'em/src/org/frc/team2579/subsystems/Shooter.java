@@ -15,17 +15,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Shooter extends Subsystem implements ControlLoopable{
 
-	public static enum ShooterControlMode { JOYSTICK, AUTON, HOLD, TEST };
+	public static enum ShooterControlMode { MANUAL, SENSORED, HOLD, TEST };
 	
-	private ShooterControlMode controlMode = ShooterControlMode.JOYSTICK;
+	private ShooterControlMode controlMode = ShooterControlMode.MANUAL;
 	
 	private CANTalon wheel;
 	
+	private static final double NATIVE_TO_RPM_FACTOR = 10 * 60 / 12;
+	public static final double BOILER_RPM_SETPOINT = 3800*3;
 	public static double mFlywheelOnTargetTolerance = 100;
-	public static double mFlywheelKp = 0.1;
+	public static double mFlywheelKp = 3;
     public static double mFlywheelKi = 0.001;
     public static double mFlywheelKd = 1.0;
-    public static double mFlywheelKf = 0.0;
+    public static double mFlywheelKf = 2.91;
     public static int mFlywheelIZone = (int) (1023.0 / mFlywheelKp);
     public static double mFlywheelRampRate = 0;
     public static int mFlywheelAllowableError = 0;
@@ -35,9 +37,13 @@ public class Shooter extends Subsystem implements ControlLoopable{
 			wheel = new CANTalon(RobotMap.SHOOTER_MOTOR_CAN_ID);
 			wheel.enableBrakeMode(false);
 			
+			wheel.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 			wheel.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
 			wheel.setPID(mFlywheelKp, mFlywheelKi, mFlywheelKd,mFlywheelKf,mFlywheelIZone,mFlywheelRampRate,0);
-			//wheel.setProfile(0);
+			//wheel.configEncoderCodesPerRev(3);
+			wheel.setProfile(0);
+			wheel.configNominalOutputVoltage(+0.0f, -0.0f);
+			wheel.configPeakOutputVoltage(+12.0f, -12.0f);
 			wheel.reverseSensor(false);
 	        wheel.reverseOutput(false);
 	        //wheel.setVoltageRampRate(36.0);
@@ -53,7 +59,7 @@ public class Shooter extends Subsystem implements ControlLoopable{
 
 	public void setWheelSpeed(double speed) {
 		wheel.changeControlMode(CANTalon.TalonControlMode.Speed);
-		wheel.set(speed);
+		wheel.setSetpoint(speed/NATIVE_TO_RPM_FACTOR);
 	}
 
 	public void setOpenLoop(double speed) {
@@ -66,7 +72,8 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	}
 
 	public double getWheelVelocity() {
-		return wheel.getEncVelocity();
+		return (wheel.getEncVelocity()) * (NATIVE_TO_RPM_FACTOR);
+		//return wheel.getEncVelocity();
 	}
 
 	@Override
@@ -82,9 +89,9 @@ public class Shooter extends Subsystem implements ControlLoopable{
 		}
 	}
 
-	private boolean isOnTarget() {
+	public boolean isOnTarget() {
 		return (wheel.getControlMode() == CANTalon.TalonControlMode.Speed
-                && Math.abs(getWheelVelocity() - getSetpoint()) < mFlywheelOnTargetTolerance);
+                && Math.abs(getWheelVelocity() - (getSetpoint() * Shooter.NATIVE_TO_RPM_FACTOR)) < mFlywheelOnTargetTolerance);
 	}
 
 	private double getSetpoint() {
@@ -93,18 +100,31 @@ public class Shooter extends Subsystem implements ControlLoopable{
 
 	@Override
 	public void controlLoopUpdate() {
-		if (controlMode == ShooterControlMode.JOYSTICK) {
+		if (controlMode == ShooterControlMode.MANUAL) {
 			shootWithJoystick();
 		}
-		else if (controlMode == ShooterControlMode.AUTON) {
-			//executeMovement();
+		else if (controlMode == ShooterControlMode.SENSORED) {
+			shootWithFeedBack();
 		}
 		
 	}
 
-	private void shootWithJoystick() {
-		setOpenLoop(OI.getInstance().getOperatorXBox().getRightTriggerAxis());
+	public void shootWithFeedBack() {
+		setWheelSpeed(Shooter.BOILER_RPM_SETPOINT);
 		
+	}
+	
+	private void shootWithJoystick() {
+		setOpenLoop(OI.getInstance().getOperatorXBox().getLeftTriggerAxis());
+		
+	}
+	
+	public void setMode(ShooterControlMode mode){
+		this.controlMode = mode;
+	}
+	
+	public ShooterControlMode getMode(){
+		return controlMode;
 	}
 
 	@Override
