@@ -23,11 +23,11 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	
 	private static final double NATIVE_TO_RPM_FACTOR = 10 * 60 / 12;
 	public static final double BOILER_RPM_SETPOINT = 3800*3;
-	public static double mFlywheelOnTargetTolerance = 100;
-	public static double mFlywheelKp = 3;
-    public static double mFlywheelKi = 0.001;
-    public static double mFlywheelKd = 1.0;
-    public static double mFlywheelKf = 2.91;
+	public static double mFlywheelOnTargetTolerance = 200;
+	public static double mFlywheelKp = 4;
+    public static double mFlywheelKi = 0.01875;
+    public static double mFlywheelKd = 10;
+    public static double mFlywheelKf = 2.8875;
     public static int mFlywheelIZone = (int) (1023.0 / mFlywheelKp);
     public static double mFlywheelRampRate = 0;
     public static int mFlywheelAllowableError = 0;
@@ -39,14 +39,15 @@ public class Shooter extends Subsystem implements ControlLoopable{
 			
 			wheel.setFeedbackDevice(FeedbackDevice.QuadEncoder);
 			wheel.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+			//wheel.setPID(mFlywheelKp, mFlywheelKi, mFlywheelKd);
 			wheel.setPID(mFlywheelKp, mFlywheelKi, mFlywheelKd,mFlywheelKf,mFlywheelIZone,mFlywheelRampRate,0);
-			//wheel.configEncoderCodesPerRev(3);
+			wheel.configEncoderCodesPerRev(3);
 			wheel.setProfile(0);
 			wheel.configNominalOutputVoltage(+0.0f, -0.0f);
 			wheel.configPeakOutputVoltage(+12.0f, -12.0f);
 			wheel.reverseSensor(false);
-	        wheel.reverseOutput(false);
-	        //wheel.setVoltageRampRate(36.0);
+	        wheel.reverseOutput(true);
+	        wheel.setVoltageRampRate(36.0);
 	        resetWheelEncoder();
 		} catch (Exception e) {
 			System.err.println("An error occurred in the Shooter constructor");
@@ -57,9 +58,20 @@ public class Shooter extends Subsystem implements ControlLoopable{
 		return Intake.getBallStop();
 	}
 
-	public void setWheelSpeed(double speed) {
-		wheel.changeControlMode(CANTalon.TalonControlMode.Speed);
-		wheel.setSetpoint(speed/NATIVE_TO_RPM_FACTOR);
+	public void setWheelSpeed(ShooterControlMode mode, double speed) {
+		if(mode == ShooterControlMode.SENSORED){
+			setMode(ShooterControlMode.SENSORED);
+			wheel.changeControlMode(CANTalon.TalonControlMode.Speed);
+			wheel.setSetpoint(speed);
+			wheel.set(speed/*NATIVE_TO_RPM_FACTOR*/);
+		}else if(mode == ShooterControlMode.MANUAL){
+			setMode(ShooterControlMode.MANUAL);
+			wheel.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+	        wheel.set(speed);
+		}else{
+			wheel.set(0);
+		}
+		
 	}
 
 	public void setOpenLoop(double speed) {
@@ -72,8 +84,8 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	}
 
 	public double getWheelVelocity() {
-		return (wheel.getEncVelocity()) * (NATIVE_TO_RPM_FACTOR);
-		//return wheel.getEncVelocity();
+		//return (wheel.getEncVelocity()) * (NATIVE_TO_RPM_FACTOR);
+		return wheel.getSpeed();
 	}
 
 	@Override
@@ -90,8 +102,9 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	}
 
 	public boolean isOnTarget() {
+		System.out.println("AT TARGET");
 		return (wheel.getControlMode() == CANTalon.TalonControlMode.Speed
-                && Math.abs(getWheelVelocity() - (getSetpoint() * Shooter.NATIVE_TO_RPM_FACTOR)) < mFlywheelOnTargetTolerance);
+                && Math.abs(getWheelVelocity() - Math.abs(getSetpoint() /* Shooter.NATIVE_TO_RPM_FACTOR*/)) < mFlywheelOnTargetTolerance);
 	}
 
 	private double getSetpoint() {
@@ -104,13 +117,13 @@ public class Shooter extends Subsystem implements ControlLoopable{
 			shootWithJoystick();
 		}
 		else if (controlMode == ShooterControlMode.SENSORED) {
-			shootWithFeedBack();
+			//shootWithFeedBack();
 		}
 		
 	}
 
 	public void shootWithFeedBack() {
-		setWheelSpeed(Shooter.BOILER_RPM_SETPOINT);
+		setWheelSpeed(ShooterControlMode.SENSORED,Shooter.BOILER_RPM_SETPOINT);
 		
 	}
 	

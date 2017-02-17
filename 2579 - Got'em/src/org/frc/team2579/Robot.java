@@ -27,7 +27,7 @@ public class Robot extends IterativeRobot {
 	public static final Intake intake = new Intake();
 	public static final Manipulator manipulator = new Manipulator();
 	public static final Climber climber = new Climber();
-	public static final Camera camera = new Camera();
+	//public static final Camera camera = new Camera();
 	public static final PowerDistributionPanel pdp = new PowerDistributionPanel();
 	public static final ControlLooper controlLoop = new ControlLooper("Main control loop", 10);
 	
@@ -84,6 +84,6 @@ public class Robot extends IterativeRobot {
 		intake.updateStatus(operationMode);
 		manipulator.updateStatus(operationMode);
 		shooter.updateStatus(operationMode);
-		//camera.updateStatus(operationMode);
+
 	}
 }

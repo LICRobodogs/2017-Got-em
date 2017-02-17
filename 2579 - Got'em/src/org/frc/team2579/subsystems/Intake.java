@@ -16,9 +16,9 @@ public class Intake extends Subsystem {
 	};
 
 	public static final double OUTER_INTAKE_LOAD_SPEED = 1.0;
-	public static final double INNER_INTAKE_LOAD_SPEED = 1.0;
+	public static final double INNER_INTAKE_LOAD_SPEED = -1.0;
 	public static final double OUTER_INTAKE_EJECT_SPEED = -0.4;
-	public static final double INNER_INTAKE_EJECT_SPEED = -0.4;
+	public static final double INNER_INTAKE_EJECT_SPEED = 0.4;
 
 	private static DoubleSolenoid ballStop;
 	private CANTalon outerRoller, innerRoller;
@@ -71,7 +71,7 @@ public class Intake extends Subsystem {
 	
 	public void feedWithCheck(){
 		if(Robot.shooter.isOnTarget() && getBallStop())
-			setSpeedInner(1);
+			setSpeedInner(-1);
 		else 
 			setSpeedInner(0);
 	}
