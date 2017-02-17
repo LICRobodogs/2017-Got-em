@@ -29,25 +29,30 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI {
 	private static OI instance;
 
-	private Joystick m_driverJoystickPower;
-	private Joystick m_driverJoystickTurn;
+	private XboxController m_driverJoystick;
 	private XboxController m_operatorXBox;
 
 	private OI() {
-		m_driverJoystickPower = new Joystick(RobotMap.DRIVER_JOYSTICK_1_USB_ID);
-		m_driverJoystickTurn = new Joystick(RobotMap.DRIVER_JOYSTICK_2_USB_ID);
+		m_driverJoystick = new XboxController(RobotMap.DRIVER_JOYSTICK_1_USB_ID);
 		m_operatorXBox = new XboxController(RobotMap.OPERATOR_XBOX_USB_ID);
 
 		// Driver's sticks
-		JoystickButton manipulatorFullyRetract = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.LEFT_BUMPER_BUTTON);
+		JoystickButton manipulatorFullyRetract = new JoystickButton(m_driverJoystick.getJoyStick(), XboxController.LEFT_BUMPER_BUTTON);
         manipulatorFullyRetract.whenPressed(new ManipulatorFullyRetract());
 		
-        JoystickButton manipulatorFullyDeploy = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.RIGHT_BUMPER_BUTTON);
+        JoystickButton manipulatorFullyDeploy = new JoystickButton(m_driverJoystick.getJoyStick(), XboxController.RIGHT_BUMPER_BUTTON);
         manipulatorFullyDeploy.whileHeld(new ManipulatorFullyDeploy());
         manipulatorFullyDeploy.whenReleased(new ManipulatorIntakeOff());
         
-        JoystickButton manipulatorOutSpeed = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.B_BUTTON);
-        manipulatorOutSpeed.whenPressed(new ManipulatorSpeed(Manipulator.INTAKE_EJECT_SPEED));
+        JoystickButton manipulatorOutSpeed = new JoystickButton(m_driverJoystick.getJoyStick(), XboxController.B_BUTTON);
+        manipulatorOutSpeed.whileHeld(new ManipulatorSpeed(Manipulator.INTAKE_EJECT_SPEED));
+        manipulatorOutSpeed.whenReleased(new ManipulatorIntakeOff());
+    
+        JoystickButton manipulatorInSpeed = new JoystickButton(m_driverJoystick.getJoyStick(), XboxController.A_BUTTON);
+        manipulatorInSpeed.whileHeld(new ManipulatorSpeed(Manipulator.INTAKE_EJECT_SPEED));
+        manipulatorInSpeed.whenReleased(new ManipulatorIntakeOff());
+        
+        // Operator's Sticks
         
         JoystickButton climb = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.X_BUTTON);
         climb.whileHeld(new ClimbUp());
@@ -67,21 +72,15 @@ public class OI {
         outerIntakeIn.whileHeld(new IntakeOuterSpeed(Intake.OUTER_INTAKE_LOAD_SPEED));
         outerIntakeIn.whenReleased(new IntakeOff());
         
-        //JoystickButton shooterShoot = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.X_BUTTON);
-        //shooterShoot.whileHeld(new ShooterShoot());
-        //shooterShoot.whenReleased(new ShooterHold());
-        
-		// Operator's Sticks
+        JoystickButton shooterShoot = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.X_BUTTON);
+        shooterShoot.whileHeld(new ShooterShoot());
+        shooterShoot.whenReleased(new ShooterHold());
 
 	}
 
 
-	public Joystick getDriverJoystickPower() {
-		return m_driverJoystickPower;
-	}
-
-	public Joystick getDriverJoystickTurn() {
-		return m_driverJoystickTurn;
+	public XboxController getDriverJoystick() {
+		return m_driverJoystick;
 	}
 
 	public XboxController getOperatorXBox() {
