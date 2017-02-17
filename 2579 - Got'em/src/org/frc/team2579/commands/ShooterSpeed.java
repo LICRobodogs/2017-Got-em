@@ -15,7 +15,7 @@ public class ShooterSpeed extends Command
 
 	@Override
 	protected void initialize() {
-		Robot.shooter.setOpenLoop(speed);
+		Robot.shooter.mSpeed = speed;
 	}
 
 	@Override

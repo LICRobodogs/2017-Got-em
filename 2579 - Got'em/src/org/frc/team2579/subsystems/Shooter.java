@@ -22,6 +22,7 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	private CANTalon wheel;
 	
 	private static final double NATIVE_TO_RPM_FACTOR = 10 * 60 / 12;
+	public double mSpeed = 0;
 	public static final double BOILER_RPM_SETPOINT = 3800*3;
 	public static double mFlywheelOnTargetTolerance = 200;
 	public static double mFlywheelKp = 4;
@@ -44,7 +45,7 @@ public class Shooter extends Subsystem implements ControlLoopable{
 			wheel.configEncoderCodesPerRev(3);
 			wheel.setProfile(0);
 			wheel.configNominalOutputVoltage(+0.0f, -0.0f);
-			wheel.configPeakOutputVoltage(+12.0f, -12.0f);
+			wheel.configPeakOutputVoltage(+12.0f, -0.0f);
 			wheel.reverseSensor(false);
 	        wheel.reverseOutput(true);
 	        wheel.setVoltageRampRate(36.0);
@@ -59,26 +60,28 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	}
 
 	public void setWheelSpeed(ShooterControlMode mode, double speed) {
+		this.mSpeed = speed;
 		if(mode == ShooterControlMode.SENSORED){
 			setMode(ShooterControlMode.SENSORED);
 			wheel.changeControlMode(CANTalon.TalonControlMode.Speed);
-			wheel.setSetpoint(speed);
-			wheel.set(speed/*NATIVE_TO_RPM_FACTOR*/);
+			wheel.setSetpoint(mSpeed);
+			wheel.set(mSpeed/*NATIVE_TO_RPM_FACTOR*/);
 		}else if(mode == ShooterControlMode.MANUAL){
 			setMode(ShooterControlMode.MANUAL);
 			wheel.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-	        wheel.set(speed);
+	        wheel.set(mSpeed);
 		}else{
 			wheel.set(0);
 		}
 		
 	}
 
-	public void setOpenLoop(double speed) {
+	/*public void setOpenLoop(double speed) {
         wheel.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
         wheel.set(speed);
     }
-		
+	*/
+	
 	public void resetWheelEncoder() {
 		wheel.setPosition(0);
 	}
@@ -117,18 +120,18 @@ public class Shooter extends Subsystem implements ControlLoopable{
 			shootWithJoystick();
 		}
 		else if (controlMode == ShooterControlMode.SENSORED) {
-			//shootWithFeedBack();
+			shootWithFeedBack();
 		}
 		
 	}
 
 	public void shootWithFeedBack() {
-		setWheelSpeed(ShooterControlMode.SENSORED,Shooter.BOILER_RPM_SETPOINT);
+		setWheelSpeed(ShooterControlMode.SENSORED,mSpeed);
 		
 	}
 	
 	private void shootWithJoystick() {
-		setOpenLoop(OI.getInstance().getOperatorXBox().getLeftTriggerAxis());
+		setWheelSpeed(ShooterControlMode.MANUAL,OI.getInstance().getOperatorXBox().getLeftTriggerAxis());
 		
 	}
 	

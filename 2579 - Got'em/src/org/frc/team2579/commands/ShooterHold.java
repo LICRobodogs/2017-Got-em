@@ -12,7 +12,7 @@ public class ShooterHold extends CommandGroup {
         addSequential(new BallStopOut());
         addSequential(new ShooterSpeed(0));
         //addParallel(new ShooterPID(ShooterControlMode.SENSORED,Shooter.BOILER_RPM_SETPOINT));
-        addSequential(new IntakeInnerSpeed(0));
+        //addSequential(new IntakeInnerSpeed(0));
         addSequential(new ShooterMode(ShooterControlMode.MANUAL));
         //addSequential(new ShooterSpeed(0));
         }

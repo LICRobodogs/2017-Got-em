@@ -54,7 +54,7 @@ public class OI {
         
         // Operator's Sticks
         
-        JoystickButton climb = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.X_BUTTON);
+        JoystickButton climb = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.RIGHT_BUMPER_BUTTON);
         climb.whileHeld(new ClimbUp());
         climb.whenReleased(new ClimbOff());
         

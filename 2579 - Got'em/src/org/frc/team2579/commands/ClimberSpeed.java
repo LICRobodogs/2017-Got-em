@@ -15,7 +15,10 @@ public class ClimberSpeed extends Command {
 
 	@Override
 	protected void initialize() {
-		Robot.climber.setSpeed(speed);
+		if(Robot.operationMode == Robot.OperationMode.COMPETITION)
+			Robot.climber.setSpeed(speed);
+		else
+			Robot.climber.setSpeed(-speed);
 	}
 
 	@Override

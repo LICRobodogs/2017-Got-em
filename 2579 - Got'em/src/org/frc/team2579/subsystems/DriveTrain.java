@@ -159,8 +159,8 @@ public class DriveTrain extends Subsystem implements ControlLoopable
 	public void driveWithJoystick() {
 		if(controlMode != DriveTrainControlMode.JOYSTICK || m_drive == null) return;
 		
-		m_moveInput = OI.getInstance().getOperatorXBox().getLeftYAxis();
-		m_steerInput = OI.getInstance().getOperatorXBox().getRightXAxis();
+		m_moveInput = OI.getInstance().getDriverJoystick().getLeftYAxis();
+		m_steerInput = OI.getInstance().getDriverJoystick().getRightXAxis();
 
 		m_moveOutput = joystickSensitivityAdjust(m_moveInput, DRIVER_JOY1_C1, DRIVER_JOY1_C2, DRIVER_JOY1_C3);
 		m_steerOutput = joystickSensitivityAdjust(m_steerInput, DRIVER_JOY1_C1, DRIVER_JOY1_C2, DRIVER_JOY1_C3);
