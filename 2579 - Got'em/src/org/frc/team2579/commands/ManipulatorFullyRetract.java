@@ -8,7 +8,7 @@ public class ManipulatorFullyRetract extends CommandGroup
 {
 	public ManipulatorFullyRetract() {
         addSequential(new ManipulatorPosition(LiftState.UP));
-        addSequential(new ManipulatorSpeed(0));
+        //addSequential(new ManipulatorSpeed(0));
 	}
 
 }

@@ -6,5 +6,6 @@ public class ClimbOff extends CommandGroup {
     
     public ClimbOff() {
         addSequential(new ClimberSpeed(0));
+        addSequential(new ClimberKonami("kill"));
     }
 }

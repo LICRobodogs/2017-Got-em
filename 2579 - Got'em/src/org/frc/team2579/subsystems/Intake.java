@@ -15,10 +15,10 @@ public class Intake extends Subsystem {
 		IN, OUT
 	};
 
-	public static final double OUTER_INTAKE_LOAD_SPEED = 1.0;
-	public static final double INNER_INTAKE_LOAD_SPEED = -1.0;
+	public static final double OUTER_INTAKE_LOAD_SPEED = 0.5;
+	public static final double INNER_INTAKE_LOAD_SPEED = 1;
 	public static final double OUTER_INTAKE_EJECT_SPEED = -0.4;
-	public static final double INNER_INTAKE_EJECT_SPEED = 0.4;
+	public static final double INNER_INTAKE_EJECT_SPEED = -0.4;
 
 	private static DoubleSolenoid ballStop;
 	private CANTalon outerRoller, innerRoller;

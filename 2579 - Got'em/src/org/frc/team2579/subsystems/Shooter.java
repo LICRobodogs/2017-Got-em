@@ -22,7 +22,7 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	private CANTalon wheel;
 	
 	private static final double NATIVE_TO_RPM_FACTOR = 10 * 60 / 12;
-	public double mSpeed = 0;
+	public double mSpeed;
 	public static final double BOILER_RPM_SETPOINT = 3800*3;
 	public static double mFlywheelOnTargetTolerance = 200;
 	public static double mFlywheelKp = 4;
@@ -46,8 +46,8 @@ public class Shooter extends Subsystem implements ControlLoopable{
 			wheel.setProfile(0);
 			wheel.configNominalOutputVoltage(+0.0f, -0.0f);
 			wheel.configPeakOutputVoltage(+12.0f, -0.0f);
-			wheel.reverseSensor(false);
-	        wheel.reverseOutput(true);
+			wheel.reverseSensor(true);
+	        wheel.reverseOutput(false);
 	        wheel.setVoltageRampRate(36.0);
 	        resetWheelEncoder();
 		} catch (Exception e) {

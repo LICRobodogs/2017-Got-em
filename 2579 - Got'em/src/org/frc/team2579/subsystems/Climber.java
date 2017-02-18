@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Climber extends Subsystem implements ControlLoopable{
 	
 	public static final double CLIMB_SPEED = 1;
+	public static double directionMod = 1;
 	private CANTalon climber;
 	
 	public Climber() {
@@ -23,7 +24,7 @@ public class Climber extends Subsystem implements ControlLoopable{
 	}
 	
 	public void setSpeed(double speed){
-		climber.set(speed);
+		climber.set(speed*directionMod);
 	}
 	
 	protected void initDefaultCommand() {
@@ -32,6 +33,14 @@ public class Climber extends Subsystem implements ControlLoopable{
 	public boolean isAtTarget() {
 		return false;
 		// return isAtTarget;
+	}
+	
+	public void setBackward(){
+		directionMod = -1;
+	}
+	
+	public void setForward(){
+		directionMod = 1;
 	}
 
 	@Override

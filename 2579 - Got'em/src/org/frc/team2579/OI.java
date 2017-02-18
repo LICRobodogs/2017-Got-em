@@ -4,6 +4,7 @@ import org.frc.team2579.commands.BallStopIn;
 import org.frc.team2579.commands.BallStopOut;
 import org.frc.team2579.commands.ClimbOff;
 import org.frc.team2579.commands.ClimbUp;
+import org.frc.team2579.commands.ClimberKonami;
 import org.frc.team2579.commands.ClimberSpeed;
 import org.frc.team2579.commands.IntakeInnerSpeed;
 import org.frc.team2579.commands.IntakeOff;
@@ -42,17 +43,26 @@ public class OI {
 		
         JoystickButton manipulatorFullyDeploy = new JoystickButton(m_driverJoystick.getJoyStick(), XboxController.RIGHT_BUMPER_BUTTON);
         manipulatorFullyDeploy.whileHeld(new ManipulatorFullyDeploy());
-        manipulatorFullyDeploy.whenReleased(new ManipulatorIntakeOff());
         
         JoystickButton manipulatorOutSpeed = new JoystickButton(m_driverJoystick.getJoyStick(), XboxController.B_BUTTON);
         manipulatorOutSpeed.whileHeld(new ManipulatorSpeed(Manipulator.INTAKE_EJECT_SPEED));
         manipulatorOutSpeed.whenReleased(new ManipulatorIntakeOff());
     
         JoystickButton manipulatorInSpeed = new JoystickButton(m_driverJoystick.getJoyStick(), XboxController.A_BUTTON);
-        manipulatorInSpeed.whileHeld(new ManipulatorSpeed(Manipulator.INTAKE_EJECT_SPEED));
+        manipulatorInSpeed.whileHeld(new ManipulatorSpeed(Manipulator.INTAKE_LOAD_SPEED));
         manipulatorInSpeed.whenReleased(new ManipulatorIntakeOff());
         
+        //EMERGENCY CLIMBER BYPASS KONAMI CODE
+        JoystickButton climberKon = new JoystickButton(m_driverJoystick.getJoyStick(), XboxController.BACK_BUTTON);
+        climberKon.whenPressed(new ClimberKonami("kon"));
+        //END EMERGENCY CLIMBER BYPASS KONAMI CODE
+        
         // Operator's Sticks
+        
+        //EMERGENCY CLIMBER BYPASS KONAMI CODE
+        JoystickButton climberAmi = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.RIGHT_JOYSTICK_BUTTON);
+        climberAmi.whenPressed(new ClimberKonami("ami"));
+        //END EMERGENCY CLIMBER BYPASS KONAMI CODE
         
         JoystickButton climb = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.RIGHT_BUMPER_BUTTON);
         climb.whileHeld(new ClimbUp());

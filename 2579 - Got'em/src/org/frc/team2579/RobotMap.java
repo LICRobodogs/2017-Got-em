@@ -8,9 +8,9 @@ package org.frc.team2579;
  */
 public class RobotMap {
 	// USB Port IDs
-	public static final int DRIVER_JOYSTICK_1_USB_ID = 1;
+	public static final int DRIVER_JOYSTICK_1_USB_ID = 0;
 	public static final int DRIVER_JOYSTICK_2_USB_ID = 2;
-	public static final int OPERATOR_XBOX_USB_ID = 0;
+	public static final int OPERATOR_XBOX_USB_ID = 1;
 
 	// MOTORS
 	public static final int DRIVETRAIN_LEFT_MOTOR1_CAN_ID = 4;
