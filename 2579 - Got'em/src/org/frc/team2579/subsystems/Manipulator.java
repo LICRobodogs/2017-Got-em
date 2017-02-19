@@ -26,6 +26,7 @@ public class Manipulator extends Subsystem implements ControlLoopable
 					RobotMap.INTAKE_DOWN_PCM_ID);
 			roller = new CANTalon(RobotMap.MANIPULATOR_MOTOR_CAN_ID);
 			roller.enableBrakeMode(true);
+			roller.setSafetyEnabled(false);
 		} catch (Exception e) {
 			System.err
 					.println("An error occurred in the Manipulator constructor");

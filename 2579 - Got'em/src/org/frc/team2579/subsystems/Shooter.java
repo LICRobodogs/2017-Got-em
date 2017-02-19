@@ -49,6 +49,7 @@ public class Shooter extends Subsystem implements ControlLoopable{
 			wheel.reverseSensor(true);
 	        wheel.reverseOutput(false);
 	        wheel.setVoltageRampRate(36.0);
+	        wheel.setSafetyEnabled(false);
 	        resetWheelEncoder();
 		} catch (Exception e) {
 			System.err.println("An error occurred in the Shooter constructor");

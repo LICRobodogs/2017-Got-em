@@ -31,8 +31,10 @@ public class Intake extends Subsystem {
 					RobotMap.INTAKE_INNER_ROLLER_MOTOR_CAN_ID);
 
 			outerRoller.enableBrakeMode(true);
+			outerRoller.setSafetyEnabled(false);
 			innerRoller.enableBrakeMode(true);
-
+			innerRoller.setSafetyEnabled(false);
+			
 			ballStop = new DoubleSolenoid(RobotMap.SHOOTER_POSITION_OUT_PCM_ID,RobotMap.SHOOTER_POSITION_IN_PCM_ID);
 		} catch (Exception e) {
 			System.err.println("An error occurred in the Intake constructor");

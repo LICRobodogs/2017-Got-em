@@ -17,6 +17,7 @@ public class Climber extends Subsystem implements ControlLoopable{
 		try {
 			climber = new CANTalon(RobotMap.CLIMBER_MOTOR_CAN_ID);
 			climber.enableBrakeMode(true);
+			climber.setSafetyEnabled(false);
 		} catch (Exception e) {
 			System.err
 					.println("An error occurred in the Manipulator constructor");
