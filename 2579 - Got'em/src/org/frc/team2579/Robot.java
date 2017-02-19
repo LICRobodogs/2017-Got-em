@@ -9,6 +9,7 @@ import org.frc.team2579.subsystems.Shooter;
 import org.frc.team2579.subsystems.DriveTrain.DriveTrainControlMode;
 import org.frc.team2579.utility.ControlLooper;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -27,7 +28,7 @@ public class Robot extends IterativeRobot {
 	public static final Intake intake = new Intake();
 	public static final Manipulator manipulator = new Manipulator();
 	public static final Climber climber = new Climber();
-	//public static final Camera camera = new Camera();
+	public static final Camera camera = new Camera();
 	public static final PowerDistributionPanel pdp = new PowerDistributionPanel();
 	public static final ControlLooper controlLoop = new ControlLooper("Main control loop", 10);
 	
@@ -44,6 +45,7 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
+		CameraServer.getInstance().startAutomaticCapture();
 		controlLoop.addLoopable(driveTrain);
     	controlLoop.addLoopable(manipulator);
     	controlLoop.addLoopable(shooter);

@@ -86,6 +86,9 @@ public class OI {
         shooterShoot.whileHeld(new ShooterShoot());
         shooterShoot.whenReleased(new ShooterHold());
 
+        JoystickButton innerIntakeOut = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.B_BUTTON);
+        innerIntakeOut.whileHeld(new IntakeInnerSpeed(Intake.INNER_INTAKE_EJECT_SPEED));
+        innerIntakeOut.whenReleased(new IntakeOff());
 	}
 
 

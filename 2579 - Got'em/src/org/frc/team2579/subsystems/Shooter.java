@@ -45,7 +45,7 @@ public class Shooter extends Subsystem implements ControlLoopable{
 			wheel.configEncoderCodesPerRev(3);
 			wheel.setProfile(0);
 			wheel.configNominalOutputVoltage(+0.0f, -0.0f);
-			wheel.configPeakOutputVoltage(+12.0f, -0.0f);
+			wheel.configPeakOutputVoltage(+0.0f, -12.0f);
 			wheel.reverseSensor(true);
 	        wheel.reverseOutput(false);
 	        wheel.setVoltageRampRate(36.0);
@@ -64,12 +64,12 @@ public class Shooter extends Subsystem implements ControlLoopable{
 		if(mode == ShooterControlMode.SENSORED){
 			setMode(ShooterControlMode.SENSORED);
 			wheel.changeControlMode(CANTalon.TalonControlMode.Speed);
-			wheel.setSetpoint(mSpeed);
-			wheel.set(mSpeed/*NATIVE_TO_RPM_FACTOR*/);
+			wheel.setSetpoint(-mSpeed);
+			wheel.set(-mSpeed/*NATIVE_TO_RPM_FACTOR*/);
 		}else if(mode == ShooterControlMode.MANUAL){
 			setMode(ShooterControlMode.MANUAL);
 			wheel.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-	        wheel.set(mSpeed);
+	        wheel.set(-mSpeed);
 		}else{
 			wheel.set(0);
 		}

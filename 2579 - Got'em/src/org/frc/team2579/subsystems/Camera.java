@@ -3,16 +3,19 @@ package org.frc.team2579.subsystems;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
+
 //import org.frc.team2579.vision.ImageProcessor;
 //import org.frc.team2579.vision.ImageProcessor.TargetInfo;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 
 public class Camera extends Subsystem {
 	private UsbCamera centerCam;
+	public static CvSource outputStream;
 
 	// private ImageProcessor imageProcessor;
 
@@ -24,7 +27,7 @@ public class Camera extends Subsystem {
 				camera.setResolution(640, 480);
 
 				CvSink cvSink = CameraServer.getInstance().getVideo();
-				CvSource outputStream = CameraServer.getInstance().putVideo(
+				outputStream = CameraServer.getInstance().putVideo(
 						"Blur", 640, 480);
 
 				Mat source = new Mat();
@@ -47,7 +50,7 @@ public class Camera extends Subsystem {
 	}
 
 	public void postCameraImageToDashboard() {
-
+	
 	}
 
 	public UsbCamera getCamera() {
