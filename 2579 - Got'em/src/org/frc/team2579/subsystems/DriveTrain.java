@@ -35,6 +35,9 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	private double m_moveInput = 0.0;
 	private double m_steerInput = 0.0;
 
+	private double adjustedOutput;
+	public static double slowMode = 1;
+	
 	private double m_moveOutput = 0.0;
 	private double m_steerOutput = 0.0;
 
@@ -169,7 +172,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 		m_steerOutput = joystickSensitivityAdjust(m_steerInput, DRIVER_JOY1_C1,
 				DRIVER_JOY1_C2, DRIVER_JOY1_C3);
 
-		m_drive.arcadeDrive(-m_moveOutput, -m_steerOutput);
+		m_drive.arcadeDrive(-m_moveOutput/slowMode, -m_steerOutput/slowMode);
 
 		// m_drive.arcadeDrive(-m_moveInput, -m_steerInput);
 	}
@@ -200,13 +203,15 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 		// Accepts raw joystick input, outputs adjusted values based on
 		// nonlinear, 2nd order polynomial mapping.
 
-		double adjustedOutput = 0.0;
-
+		adjustedOutput = 0.0;
+		
+		adjustedOutput = Math.pow(rawInput, 3)*100;
+		/*
 		if (rawInput < 0) {
 			adjustedOutput = -(C1 * Math.pow(rawInput, 2) + C2 * rawInput + C3);
 		} else if (rawInput > 0) {
 			adjustedOutput = (C1 * Math.pow(rawInput, 2) + C2 * rawInput + C3);
-		}
+		} */ 
 
 		return adjustedOutput;
 
@@ -354,6 +359,8 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 					leftDrive1.getEncVelocity());
 			SmartDashboard.putNumber("Current Right Robot Drive EncVelocity: ",
 					rightDrive1.getEncVelocity());
+			SmartDashboard.putNumber("Malcocis", adjustedOutput);
+			SmartDashboard.putNumber("Speed", slowMode);
 		}
 	}
 

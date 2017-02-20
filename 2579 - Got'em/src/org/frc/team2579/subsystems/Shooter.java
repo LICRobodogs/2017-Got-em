@@ -23,7 +23,7 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	
 	private static final double NATIVE_TO_RPM_FACTOR = 10 * 60 / 12;
 	public double mSpeed;
-	public static final double BOILER_RPM_SETPOINT = 3800*3;
+	public static final double BOILER_RPM_SETPOINT = 2500*3;
 	public static double mFlywheelOnTargetTolerance = 200;
 	public static double mFlywheelKp = 4;
     public static double mFlywheelKi = 0.01875;
@@ -100,6 +100,7 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	public void updateStatus(Robot.OperationMode operationMode) {
 		SmartDashboard.putNumber("Shooter Speed: ", getWheelVelocity());
 		SmartDashboard.putNumber("flywheel_setpoint", getSetpoint());
+		SmartDashboard.putNumber("isOnTarget result", Math.abs(getWheelVelocity() + Math.abs(getSetpoint())));
         SmartDashboard.putBoolean("flywheel_on_target", isOnTarget());
 		if (operationMode == Robot.OperationMode.TEST) {
 		}
@@ -108,7 +109,7 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	public boolean isOnTarget() {
 		System.out.println("AT TARGET");
 		return (wheel.getControlMode() == CANTalon.TalonControlMode.Speed
-                && Math.abs(getWheelVelocity() - Math.abs(getSetpoint() /* Shooter.NATIVE_TO_RPM_FACTOR*/)) < mFlywheelOnTargetTolerance);
+                && Math.abs(getWheelVelocity() + Math.abs(getSetpoint())) < mFlywheelOnTargetTolerance);
 	}
 
 	private double getSetpoint() {

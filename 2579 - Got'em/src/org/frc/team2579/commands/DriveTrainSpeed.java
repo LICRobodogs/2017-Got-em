@@ -1,6 +1,8 @@
 package org.frc.team2579.commands;
 
 import org.frc.team2579.Robot;
+import org.frc.team2579.subsystems.DriveTrain;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 public class DriveTrainSpeed extends Command
@@ -13,7 +15,7 @@ public class DriveTrainSpeed extends Command
     }
 
     protected void initialize() {
-    	Robot.driveTrain.setSpeed(speed);
+    	DriveTrain.slowMode = speed;
     }
 
     protected void execute() {

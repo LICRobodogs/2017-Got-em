@@ -73,7 +73,7 @@ public class Intake extends Subsystem {
 	
 	public void feedWithCheck(){
 		if(Robot.shooter.isOnTarget() && getBallStop())
-			setSpeedInner(-1);
+			setSpeedInner(1);
 		else 
 			setSpeedInner(0);
 	}

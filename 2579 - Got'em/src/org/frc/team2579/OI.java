@@ -6,6 +6,7 @@ import org.frc.team2579.commands.ClimbOff;
 import org.frc.team2579.commands.ClimbUp;
 import org.frc.team2579.commands.ClimberKonami;
 import org.frc.team2579.commands.ClimberSpeed;
+import org.frc.team2579.commands.DriveTrainSpeed;
 import org.frc.team2579.commands.IntakeInnerSpeed;
 import org.frc.team2579.commands.IntakeOff;
 import org.frc.team2579.commands.IntakeOuterSpeed;
@@ -43,6 +44,12 @@ public class OI {
 		
         JoystickButton manipulatorFullyDeploy = new JoystickButton(m_driverJoystick.getJoyStick(), XboxController.RIGHT_BUMPER_BUTTON);
         manipulatorFullyDeploy.whileHeld(new ManipulatorFullyDeploy());
+        
+        JoystickButton driveSlowSpeed = new JoystickButton(m_driverJoystick.getJoyStick(), XboxController.X_BUTTON);
+        driveSlowSpeed.whenPressed(new DriveTrainSpeed(3));
+        
+        JoystickButton driveFastSpeed = new JoystickButton(m_driverJoystick.getJoyStick(), XboxController.Y_BUTTON);
+        driveFastSpeed.whenPressed(new DriveTrainSpeed(1));
         
         JoystickButton manipulatorOutSpeed = new JoystickButton(m_driverJoystick.getJoyStick(), XboxController.B_BUTTON);
         manipulatorOutSpeed.whileHeld(new ManipulatorSpeed(Manipulator.INTAKE_EJECT_SPEED));
