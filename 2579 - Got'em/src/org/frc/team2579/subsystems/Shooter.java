@@ -23,7 +23,7 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	
 	private static final double NATIVE_TO_RPM_FACTOR = 10 * 60 / 12;
 	public double mSpeed;
-	public static final double BOILER_RPM_SETPOINT = 2500*3;
+	public static final double BOILER_RPM_SETPOINT = 12000;
 	public static double mFlywheelOnTargetTolerance = 200;
 	public static double mFlywheelKp = 4;
     public static double mFlywheelKi = 0.01875;
