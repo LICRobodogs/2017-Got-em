@@ -9,6 +9,7 @@ import org.frc.team2579.utility.ControlLoopable;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
+import com.ctre.CANTalon.TalonControlMode;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,7 +20,7 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	
 	private ShooterControlMode controlMode = ShooterControlMode.MANUAL;
 	
-	private CANTalon wheel;
+	private CANTalon wheel,wheel2;
 	
 	private static final double NATIVE_TO_RPM_FACTOR = 10 * 60 / 12;
 	public double mSpeed;
@@ -36,6 +37,7 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	public Shooter() {
 		try {
 			wheel = new CANTalon(RobotMap.SHOOTER_MOTOR_CAN_ID);
+			wheel2 = new CANTalon(RobotMap.SHOOTER_MOTOR_TWO_CAN_ID);
 			wheel.enableBrakeMode(false);
 			
 			wheel.setFeedbackDevice(FeedbackDevice.QuadEncoder);
@@ -50,6 +52,10 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	        wheel.reverseOutput(false);
 	        wheel.setVoltageRampRate(36.0);
 	        wheel.setSafetyEnabled(false);
+	        wheel2.changeControlMode(TalonControlMode.Follower);
+	        wheel2.set(wheel.getDeviceID());
+	        wheel2.setSafetyEnabled(false);
+	        wheel2.enableBrakeMode(false);
 	        resetWheelEncoder();
 		} catch (Exception e) {
 			System.err.println("An error occurred in the Shooter constructor");
