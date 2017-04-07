@@ -10,7 +10,7 @@ public class ShooterShoot extends CommandGroup {
     
     public ShooterShoot() {
         //addSequential(new ShooterMode(ShooterControlMode.SENSORED));
-        addSequential(new BallStopIn());
+        //addSequential(new BallStopIn());
         //addParallel(new ShooterSpeed(Shooter.BOILER_RPM_SETPOINT));
         addParallel(new ShooterPID(ShooterControlMode.SENSORED,Shooter.BOILER_RPM_SETPOINT));
         //addParallel(new FeedShooter());

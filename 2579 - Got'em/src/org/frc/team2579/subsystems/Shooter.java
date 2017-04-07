@@ -24,12 +24,12 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	
 	private static final double NATIVE_TO_RPM_FACTOR = 10 * 60 / 12;
 	public double mSpeed;
-	public static final double BOILER_RPM_SETPOINT = 16000;
-	public static double mFlywheelOnTargetTolerance = 200;
-	public static double mFlywheelKp = 4;
-    public static double mFlywheelKi = 0.01875;
-    public static double mFlywheelKd = 10;
-    public static double mFlywheelKf = 2.8875;
+	public static final double BOILER_RPM_SETPOINT = 13000;
+	public static double mFlywheelOnTargetTolerance = 400;
+	public static double mFlywheelKp = 40;
+    public static double mFlywheelKi = 10.0;
+    public static double mFlywheelKd = 400;
+    public static double mFlywheelKf = 3.5;
     public static int mFlywheelIZone = (int) (1023.0 / mFlywheelKp);
     public static double mFlywheelRampRate = 0;
     public static int mFlywheelAllowableError = 0;
@@ -56,6 +56,7 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	        wheel2.set(wheel.getDeviceID());
 	        wheel2.setSafetyEnabled(false);
 	        wheel2.enableBrakeMode(false);
+	        wheel2.reverseOutput(true);
 	        resetWheelEncoder();
 		} catch (Exception e) {
 			System.err.println("An error occurred in the Shooter constructor");
@@ -113,7 +114,7 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	}
 
 	public boolean isOnTarget() {
-		System.out.println("AT TARGET");
+		//System.out.println("AT TARGET");
 		return (wheel.getControlMode() == CANTalon.TalonControlMode.Speed
                 && Math.abs(getWheelVelocity() + Math.abs(getSetpoint())) < mFlywheelOnTargetTolerance);
 	}

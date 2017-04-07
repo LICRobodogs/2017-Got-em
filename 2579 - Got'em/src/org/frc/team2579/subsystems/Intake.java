@@ -7,7 +7,6 @@ import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Intake extends Subsystem {
@@ -25,13 +24,13 @@ public class Intake extends Subsystem {
 
 	public Intake() {
 		try {
-			//outerRoller = new CANTalon(
-			//		RobotMap.INTAKE_OUTER_ROLLER_MOTOR_CAN_ID);
+			outerRoller = new CANTalon(
+					RobotMap.INTAKE_OUTER_ROLLER_MOTOR_CAN_ID);
 			innerRoller = new CANTalon(
 					RobotMap.INTAKE_INNER_ROLLER_MOTOR_CAN_ID);
 
-			//outerRoller.enableBrakeMode(true);
-			//outerRoller.setSafetyEnabled(false);
+			outerRoller.enableBrakeMode(true);
+			outerRoller.setSafetyEnabled(false);
 			innerRoller.enableBrakeMode(true);
 			innerRoller.setSafetyEnabled(false);
 			
@@ -72,7 +71,7 @@ public class Intake extends Subsystem {
 	}
 	
 	public void feedWithCheck(){
-		if(Robot.shooter.isOnTarget() && getBallStop())
+		if(Robot.shooter.isOnTarget())
 			setSpeedInner(1);
 		else 
 			setSpeedInner(0);

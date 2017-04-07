@@ -10,9 +10,11 @@ import org.frc.team2579.RobotMap;
 import com.kauailabs.navx.frc.AHRS;
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.FeedbackDevice;
+import com.ctre.CANTalon.SetValueMotionProfile;
 import com.ctre.CANTalon.TalonControlMode;
 
-import org.frc.team2579.utility.ControlLoopable;
+import org.frc.team2579.commands.auton.DriveForwardMP;
+import org.frc.team2579.utility.*;
 
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -43,11 +45,13 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 
 	// NavX
 
-	private AHRS mxp = new AHRS(SPI.Port.kMXP);
+	//private AHRS mxp = new AHRS(SPI.Port.kMXP);
 
 	// Set control mode
-	private DriveTrainControlMode controlMode = DriveTrainControlMode.JOYSTICK;
+	public static DriveTrainControlMode controlMode = DriveTrainControlMode.JOYSTICK;
 
+	static CANTalon.SetValueMotionProfile setValue;
+	
 	// Robot Intrinsics
 	public static double m_periodMs;
 
@@ -63,21 +67,25 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 
 	public static final double WHEEL_TO_WHEEL_DIST = 20.0; // inches TEMP VALUE
 
-	public static final double LEFT_P = .1;
-	public static final double LEFT_I = 0.001;
-	public static final double LEFT_D = 1.0;
+	public static final double LEFT_P = .03;
+	public static final double LEFT_I = 0.00001;
+	public static final double LEFT_D = 0.01;
+	public static final double LEFT_F = 0.325;
 
-	public static final double RIGHT_P = .1;
-	public static final double RIGHT_I = 0.001;
-	public static final double RIGHT_D = 1.0;
-
+	public static final double RIGHT_P = .03;
+	public static final double RIGHT_I = 0.00001;
+	public static final double RIGHT_D = 0.01;
+	public static final double RIGHT_F = 0.325;
+	
 	public static final double HEADING_CONTROL_P = .1;
 	public static final double HEADING_CONTROL_I = 0.001;
 	public static final double HEADING_CONTROL_D = 1.0;
 	public static final double HEADING_CONTROL_MAX_ERROR = 3.0; // in degrees
 	public static final double HEADING_CONTROL_PERIOD = 50;
 
-	private final PIDOutput headingControlPIDOut = new PIDOutput() {
+	
+	
+	/*private final PIDOutput headingControlPIDOut = new PIDOutput() {
 		public void pidWrite(double d) {
 		}
 	};
@@ -85,32 +93,38 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	PIDController headingControlPID = new PIDController(HEADING_CONTROL_P,
 			HEADING_CONTROL_I, HEADING_CONTROL_D, mxp, headingControlPIDOut,
 			HEADING_CONTROL_PERIOD);
+	 */
 
+	
 	// Motor controllers
 	// private ArrayList<CANTalonEncoder> motorControllers = new
 	// ArrayList<CANTalonEncoder>();
 
-	private CANTalon leftDrive1;
+	public static CANTalon leftDrive1;
 	private CANTalon leftDrive2;
 
-	private CANTalon rightDrive1;
+	public static CANTalon rightDrive1;
 	private CANTalon rightDrive2;
 
-	private RobotDrive m_drive;
+	public static CANTalon.MotionProfileStatus _status = new CANTalon.MotionProfileStatus();
+	
+	private static RobotDrive m_drive;
 
 	private List<double[]> autonDesiresList = new ArrayList<double[]>();
 
 	private double[] vTime = new double[5];
 
+	private static boolean isFinished;
+
 	public DriveTrain() {
 		try {
 			leftDrive1 = new CANTalon(RobotMap.DRIVETRAIN_LEFT_MOTOR1_CAN_ID);
 			leftDrive2 = new CANTalon(RobotMap.DRIVETRAIN_LEFT_MOTOR2_CAN_ID);
-			leftDrive1.setPID(LEFT_P, LEFT_I, LEFT_D);
+			leftDrive1.setPID(LEFT_P, LEFT_I, LEFT_D,LEFT_F, 1, 0, 0);
 
 			rightDrive1 = new CANTalon(RobotMap.DRIVETRAIN_RIGHT_MOTOR1_CAN_ID);
 			rightDrive2 = new CANTalon(RobotMap.DRIVETRAIN_RIGHT_MOTOR2_CAN_ID);
-			rightDrive1.setPID(RIGHT_P, RIGHT_I, RIGHT_D);
+			rightDrive1.setPID(RIGHT_P, RIGHT_I, RIGHT_D, RIGHT_F, 1, 0, 0);
 
 			leftDrive2.changeControlMode(TalonControlMode.Follower);
 			leftDrive2.set(leftDrive1.getDeviceID());
@@ -140,10 +154,10 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 			m_drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
 			m_drive.setSafetyEnabled(false);
 
-			headingControlPID.setInputRange(-180.0f, 180.0f);
-			headingControlPID.setOutputRange(-180.0f, 180.0f);
-			headingControlPID.setAbsoluteTolerance(HEADING_CONTROL_MAX_ERROR);
-			headingControlPID.setContinuous();
+			//headingControlPID.setInputRange(-180.0f, 180.0f);
+			//headingControlPID.setOutputRange(-180.0f, 180.0f);
+			//headingControlPID.setAbsoluteTolerance(HEADING_CONTROL_MAX_ERROR);
+			//headingControlPID.setContinuous();
 
 		} catch (Exception e) {
 			System.err
@@ -191,6 +205,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 			leftDrive1.changeControlMode(TalonControlMode.MotionProfile);
 			rightDrive1.changeControlMode(TalonControlMode.MotionProfile);
 		}
+		isFinished = false;
 	}
 
 	@Override
@@ -217,6 +232,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 
 	}
 
+	/*
 	public void addMoveDistance(double distanceDesire) {
 		// accepts distance (inches), adds move distance command to auton
 		// routine
@@ -246,6 +262,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 		}
 	}
 
+	
 	private void generateProfile(CANTalon drive, double setPoint) {
 		CANTalon.TrajectoryPoint point = new CANTalon.TrajectoryPoint();
 		drive.clearMotionProfileTrajectories();
@@ -331,13 +348,21 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	private void getNextPoint() {
 
 	}
+*/
 
+	
+	
 	@Override
 	public void controlLoopUpdate() {
 		if (controlMode == DriveTrainControlMode.JOYSTICK) {
 			driveWithJoystick();
+			//System.out.println("I AM IN TELEOP");
 		} else if (controlMode == DriveTrainControlMode.AUTON) {
-			executeMovement();
+		    //new DriveForwardMP();
+			//System.out.println("I AM IN AUTON");
+			//leftDriveMP.control();
+			//rightDriveMP.control();
+			//if()
 		}
 
 	}
@@ -350,7 +375,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 
 	public void updateStatus(Robot.OperationMode operationMode) {
 		if (operationMode == Robot.OperationMode.COMPETITION) {
-			SmartDashboard.putNumber("Current Robot Angle: ", mxp.getYaw());
+			//SmartDashboard.putNumber("Current Robot Angle: ", mxp.getYaw());
 			SmartDashboard.putNumber("Current Left Robot Drive Position: ",
 					leftDrive1.getPosition());
 			SmartDashboard.putNumber("Current Right Robot Drive Position: ",
@@ -359,9 +384,103 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 					leftDrive1.getEncVelocity());
 			SmartDashboard.putNumber("Current Right Robot Drive EncVelocity: ",
 					rightDrive1.getEncVelocity());
+			SmartDashboard.putNumber("Current Right Robot Drive Error: ",
+					rightDrive1.getError());
+			SmartDashboard.putNumber("Current Left Robot Drive Error: ",
+					leftDrive1.getError());
 			SmartDashboard.putNumber("Malcocis", adjustedOutput);
 			SmartDashboard.putNumber("Speed", slowMode);
 		}
 	}
+	
+	public static boolean isFinished() {
+		return isFinished;
+	}
+	
+	public void setFinished(boolean isFinished) {
+		this.isFinished = isFinished;
+	}
 
+	public static void startFilling(double[][] profile, int totalCnt) {
+		/* create an empty point */
+		CANTalon.TrajectoryPoint point = new CANTalon.TrajectoryPoint();
+		System.out.println("In start filling");
+		/* did we get an underrun condition since last time we checked ? */
+		if (_status.hasUnderrun) {
+			/* better log it so we know about it */
+			instrumentation.OnUnderrun();
+			/*
+			 * clear the error. This flag does not auto clear, this way 
+			 * we never miss logging it.
+			 */
+			leftDrive1.clearMotionProfileHasUnderrun();
+			rightDrive1.clearMotionProfileHasUnderrun();
+		}
+		/*
+		 * just in case we are interrupting another MP and there is still buffer
+		 * points in memory, clear it.
+		 */
+		leftDrive1.clearMotionProfileTrajectories();
+		rightDrive1.clearMotionProfileTrajectories();
+		
+		/* This is fast since it's just into our TOP buffer */
+		for (int i = 0; i < totalCnt; ++i) {
+			/* for each point, fill our structure and pass it to API */
+			point.position = profile[i][0];
+			point.velocity = profile[i][1];
+			point.timeDurMs = (int) profile[i][2];
+			point.profileSlotSelect = 0; /* which set of gains would you like to use? */
+			point.velocityOnly = false; /* set true to not do any position
+										 * servo, just velocity feedforward
+										 */
+			point.zeroPos = false;
+			if (i == 0)
+				point.zeroPos = true; /* set this to true on the first point */
+
+			point.isLastPoint = false;
+			if ((i + 1) == totalCnt)
+				point.isLastPoint = true; /* set this to true on the last point  */
+
+			leftDrive1.pushMotionProfileTrajectory(point);
+			rightDrive1.pushMotionProfileTrajectory(point);
+			
+		}
+		
+	}
+
+	public static void startMP(){
+		CANTalon.SetValueMotionProfile setOutput = getSetValue();
+		
+		leftDrive1.set(setOutput.value);
+		rightDrive1.set(setOutput.value);
+		leftDrive1.processMotionProfileBuffer();
+		rightDrive1.processMotionProfileBuffer();
+		isFinished = (Math.abs((MiddleGearBackwardProfile.Points[MiddleGearBackwardProfile.kNumPoints-1][0]*2) - 
+				(rightDrive1.getPosition() + leftDrive1.getPosition())) < .25) || (Math.abs((MiddleGearForwardProfile.Points[MiddleGearForwardProfile.kNumPoints-1][0]*2) - (rightDrive1.getPosition() + leftDrive1.getPosition())) < .25);
+		//System.out.println(setOutput.toString());
+		//System.out.println(setValue.toString());
+	}
+	
+	public static SetValueMotionProfile getSetValue() {
+		return setValue;
+	}
+
+	public static void setSetValue(SetValueMotionProfile newVal) {
+		setValue = newVal;
+	}
+	
+	public static void resetPosition(){
+		leftDrive1.setPosition(0);
+		rightDrive1.setPosition(0);
+	}
+	
+	
+	
+	public static void resetMP(){
+		leftDrive1.clearMotionProfileTrajectories();
+		rightDrive1.clearMotionProfileTrajectories();
+		setValue = SetValueMotionProfile.Disable;
+		leftDrive1.set(setValue.value);
+		rightDrive1.set(setValue.value);
+	}
 }
