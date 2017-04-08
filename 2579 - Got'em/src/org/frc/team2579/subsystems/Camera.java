@@ -14,7 +14,13 @@ import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 
 public class Camera extends Subsystem {
-	private UsbCamera centerCam;
+
+	@Override
+	protected void initDefaultCommand() {
+		// TODO Auto-generated method stub
+		
+	}
+	/*private UsbCamera centerCam;
 	public static CvSource outputStream;
 
 	// private ImageProcessor imageProcessor;
@@ -56,5 +62,5 @@ public class Camera extends Subsystem {
 	public UsbCamera getCamera() {
 		return centerCam;
 	}
-
+*/
 }

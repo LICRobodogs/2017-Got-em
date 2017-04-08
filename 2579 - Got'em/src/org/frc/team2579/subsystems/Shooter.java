@@ -131,6 +131,9 @@ public class Shooter extends Subsystem implements ControlLoopable{
 		else if (controlMode == ShooterControlMode.SENSORED) {
 			shootWithFeedBack();
 		}
+		else if (controlMode == ShooterControlMode.HOLD){
+			shootWithJoystick();
+		}
 		
 	}
 

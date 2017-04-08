@@ -12,6 +12,7 @@ import org.frc.team2579.commands.IntakeOff;
 import org.frc.team2579.commands.IntakeOuterSpeed;
 import org.frc.team2579.commands.ManipulatorFullyDeploy;
 import org.frc.team2579.commands.ManipulatorFullyRetract;
+import org.frc.team2579.commands.ManipulatorGearDeploy;
 import org.frc.team2579.commands.ManipulatorIntakeOff;
 import org.frc.team2579.commands.ManipulatorSpeed;
 import org.frc.team2579.commands.ShooterHold;
@@ -64,6 +65,9 @@ public class OI {
         climberKon.whenPressed(new ClimberKonami("kon"));
         //END EMERGENCY CLIMBER BYPASS KONAMI CODE
         
+        JoystickButton manipulatorGearDeploy = new JoystickButton(m_driverJoystick.getJoyStick(), XboxController.START_BUTTON);
+        manipulatorGearDeploy.whenPressed(new ManipulatorGearDeploy());
+        
         // Operator's Sticks
         
         //EMERGENCY CLIMBER BYPASS KONAMI CODE
@@ -75,11 +79,11 @@ public class OI {
         climb.whileHeld(new ClimbUp());
         climb.whenReleased(new ClimbOff());
         
-        JoystickButton ballStopIn = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.BACK_BUTTON);
-        ballStopIn.whenPressed(new BallStopIn());
+        //JoystickButton ballStopIn = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.BACK_BUTTON);
+        //ballStopIn.whenPressed(new BallStopIn());
         
-        JoystickButton ballStopOut = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.START_BUTTON);
-        ballStopOut.whenPressed(new BallStopOut());
+        //JoystickButton ballStopOut = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.START_BUTTON);
+        //ballStopOut.whenPressed(new BallStopOut());
         
         JoystickButton innerIntakeIn = new JoystickButton(m_operatorXBox.getJoyStick(), XboxController.A_BUTTON);
         innerIntakeIn.whileHeld(new IntakeInnerSpeed(Intake.INNER_INTAKE_LOAD_SPEED));

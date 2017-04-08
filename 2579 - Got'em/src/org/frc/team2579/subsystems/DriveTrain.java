@@ -39,6 +39,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 
 	private double adjustedOutput;
 	public static double slowMode = 1;
+	public static String whichAuton = "null";
 	
 	private double m_moveOutput = 0.0;
 	private double m_steerOutput = 0.0;
@@ -192,7 +193,7 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 	}
 
 	public void setControlMode(DriveTrainControlMode controlMode) {
-		this.controlMode = controlMode;
+		DriveTrain.controlMode = controlMode;
 		if (controlMode == DriveTrainControlMode.JOYSTICK) {
 			leftDrive1.changeControlMode(TalonControlMode.PercentVbus);
 			rightDrive1.changeControlMode(TalonControlMode.PercentVbus);
@@ -455,8 +456,14 @@ public class DriveTrain extends Subsystem implements ControlLoopable {
 		rightDrive1.set(setOutput.value);
 		leftDrive1.processMotionProfileBuffer();
 		rightDrive1.processMotionProfileBuffer();
-		isFinished = (Math.abs((MiddleGearBackwardProfile.Points[MiddleGearBackwardProfile.kNumPoints-1][0]*2) - 
-				(rightDrive1.getPosition() + leftDrive1.getPosition())) < .25) || (Math.abs((MiddleGearForwardProfile.Points[MiddleGearForwardProfile.kNumPoints-1][0]*2) - (rightDrive1.getPosition() + leftDrive1.getPosition())) < .25);
+		if(whichAuton == "Side"){
+			isFinished = (Math.abs((SideGearForwardProfile.Points[SideGearForwardProfile.kNumPoints-1][0]*2) - (rightDrive1.getPosition() + leftDrive1.getPosition())) < .25) || (Math.abs((MiddleGearBackwardProfile.Points[MiddleGearBackwardProfile.kNumPoints-1][0]*2) - (rightDrive1.getPosition() + leftDrive1.getPosition())) < .25); 
+		}else if(whichAuton == "Center"){
+			isFinished = (Math.abs((MiddleGearBackwardProfile.Points[MiddleGearBackwardProfile.kNumPoints-1][0]*2) - (rightDrive1.getPosition() + leftDrive1.getPosition())) < .25) || (Math.abs((MiddleGearForwardProfile.Points[MiddleGearForwardProfile.kNumPoints-1][0]*2) - (rightDrive1.getPosition() + leftDrive1.getPosition())) < .25);
+			}else{
+				
+			}
+				
 		//System.out.println(setOutput.toString());
 		//System.out.println(setValue.toString());
 	}

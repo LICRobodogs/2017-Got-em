@@ -1,6 +1,8 @@
 package org.frc.team2579.commands;
 
 import org.frc.team2579.Robot;
+import org.frc.team2579.subsystems.Shooter;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 public class FeedShooter  extends Command

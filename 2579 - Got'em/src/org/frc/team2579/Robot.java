@@ -2,6 +2,7 @@ package org.frc.team2579;
 
 import org.frc.team2579.commands.auton.CenterPegDropOff;
 import org.frc.team2579.commands.auton.DriveForwardMP;
+import org.frc.team2579.commands.auton.SidePegDropOff;
 import org.frc.team2579.subsystems.Camera;
 import org.frc.team2579.subsystems.Climber;
 import org.frc.team2579.subsystems.DriveTrain;
@@ -37,7 +38,6 @@ public class Robot extends IterativeRobot {
 	public static final Intake intake = new Intake();
 	public static final Manipulator manipulator = new Manipulator();
 	public static final Climber climber = new Climber();
-	//public static final Camera camera = new Camera();
 	public static final PowerDistributionPanel pdp = new PowerDistributionPanel();
 	public static final ControlLooper controlLoop = new ControlLooper("Main control loop", 10);
 	
@@ -57,7 +57,7 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	public void robotInit() {
-		//CameraServer.getInstance().startAutomaticCapture();
+		CameraServer.getInstance().startAutomaticCapture();
 		controlLoop.addLoopable(driveTrain);
     	controlLoop.addLoopable(manipulator);
     	controlLoop.addLoopable(shooter);
@@ -102,7 +102,6 @@ public class Robot extends IterativeRobot {
 	
 	public void autonomousPeriodic(){
 		Scheduler.getInstance().run();
-		//DriveTrain.startMP();
 		updateStatus();
 	}
 	 
@@ -134,8 +133,10 @@ public class Robot extends IterativeRobot {
 	
 	public void setupAutonChooser(){
 		autonChooser = new SendableChooser<Command>();
-		autonChooser.addObject("Do Nothing", new CommandGroup());
 		autonChooser.addDefault("Center Peg", new CenterPegDropOff());
+		autonChooser.addObject("Do Nothing", new CommandGroup());
+		autonChooser.addObject("Side Peg", new SidePegDropOff());
+		autonChooser.addObject("SHOOT Side Peg", new SidePegShoot());
 		SmartDashboard.putData("Auton Setting", autonChooser);
 	}
 	
