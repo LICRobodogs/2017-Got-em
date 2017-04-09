@@ -15,11 +15,14 @@ public class ShootAuton extends Command{
 
 	protected void initialize(){
 		setTimeout(6);
-		Robot.shooter.setWheelSpeed(mode, speed);
+		//Robot.shooter.setWheelSpeed(mode, speed);
 	}
 
 	protected void execute() {
-		Robot.intake.feedWithCheck();
+		Robot.intake.setSpeedInner(.6);
+		//Robot.shooter.shootWithFeedBack();
+		//Robot.intake.feedWithCheck();
+		Robot.shooter.setWheelSpeed(mode, speed);
     }
 		
 	protected void end() {

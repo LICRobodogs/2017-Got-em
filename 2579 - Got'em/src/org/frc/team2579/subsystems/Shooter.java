@@ -114,7 +114,7 @@ public class Shooter extends Subsystem implements ControlLoopable{
 	}
 
 	public boolean isOnTarget() {
-		//System.out.println("AT TARGET");
+		System.out.println("AT TARGET");
 		return (wheel.getControlMode() == CANTalon.TalonControlMode.Speed
                 && Math.abs(getWheelVelocity() + Math.abs(getSetpoint())) < mFlywheelOnTargetTolerance);
 	}
