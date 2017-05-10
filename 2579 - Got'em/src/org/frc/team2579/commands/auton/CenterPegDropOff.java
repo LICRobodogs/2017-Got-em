@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class CenterPegDropOff extends CommandGroup {
     
     public CenterPegDropOff() {
+    	addSequential(new ManipulatorPosition(Manipulator.LiftState.UP));
+    	addSequential(new WaitCommand(.5));
     	addSequential(new DriveForwardMP());
     	System.out.println("DONE DRIVING");
     	addSequential(new WaitCommand(1));

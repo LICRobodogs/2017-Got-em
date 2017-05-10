@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 
 public class SidePegShoot extends CommandGroup {
 	public SidePegShoot(){
+		addSequential(new ManipulatorPosition(Manipulator.LiftState.UP));
+		addSequential(new WaitCommand(.5));
 		addSequential(new ShootAuton(ShooterControlMode.SENSORED,Shooter.BOILER_RPM_SETPOINT));
 		addSequential(new DriveSideForward());
 		addSequential(new WaitCommand(1));
