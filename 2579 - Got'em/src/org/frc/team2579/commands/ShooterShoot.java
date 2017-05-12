@@ -1,6 +1,5 @@
 package org.frc.team2579.commands;
 
-import org.frc.team2579.Robot;
 import org.frc.team2579.subsystems.Shooter;
 import org.frc.team2579.subsystems.Shooter.ShooterControlMode;
 

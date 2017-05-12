@@ -3,6 +3,7 @@ package org.frc.team2579;
 import org.frc.team2579.commands.auton.CenterPegDropOff;
 import org.frc.team2579.commands.auton.DriveForwardMP;
 import org.frc.team2579.commands.auton.SidePegDropOff;
+import org.frc.team2579.commands.auton.SidePegShoot;
 import org.frc.team2579.subsystems.Camera;
 import org.frc.team2579.subsystems.Climber;
 import org.frc.team2579.subsystems.DriveTrain;
